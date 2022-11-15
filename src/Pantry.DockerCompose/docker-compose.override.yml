@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  pantry-service:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      USER_SECRETS_ID: 6c1d26a8-0033-4d78-acaa-ed773067b4be
+    ports:
+      - "8080:80"
+    build:
+      context: ../
+      dockerfile: Pantry.Service/Dockerfile.local
+    volumes:
+      - $HOME/.microsoft/usersecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID

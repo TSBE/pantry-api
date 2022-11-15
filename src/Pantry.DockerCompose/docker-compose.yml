@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  pantry-service:
+    image: pantry-service
+    build:
+      context: .
+      dockerfile: ../Pantry.Service/Dockerfile
+    depends_on:
+      - postgresdb
+  postgresdb:
+    container_name: pantry-postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432

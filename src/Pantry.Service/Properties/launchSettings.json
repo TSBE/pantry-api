@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Pantry.Service": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "health/live",
+      "applicationUrl": "http://localhost:8080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {}
+    }
+  }
+}

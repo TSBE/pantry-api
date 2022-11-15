@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <TargetFramework>net7.0</TargetFramework>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <IsTestProject>false</IsTestProject>
+      <SonarQubeTestProject>true</SonarQubeTestProject>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="6.8.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+      <PackageReference Include="xunit" Version="2.4.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.11" />
+      <PackageReference Include="System.Text.Json" Version="6.0.7" />
+      <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+   </ItemGroup>
+
+   <ItemGroup>
+     <ProjectReference Include="..\..\src\Pantry.Common\Pantry.Common.csproj" />
+   </ItemGroup>
+
+</Project>
