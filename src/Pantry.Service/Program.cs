@@ -12,7 +12,6 @@ public static class Program
     [ExcludeFromCodeCoverage(Justification = "Not testable.")]
     public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-    [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Necessary for the integration tests.")]
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return new HostBuilder()

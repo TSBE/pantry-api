@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Opw.HttpExceptions;
 using Opw.HttpExceptions.AspNetCore;
 using Opw.HttpExceptions.AspNetCore.Mappers;
+using Pantry.Common;
 using Pantry.Common.Diagnostics.HealthChecks;
 using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
@@ -82,7 +83,7 @@ public class Startup
             o.IsExceptionResponse = context => (context.Response.StatusCode >= 400 && context.Response.StatusCode < 600);
 
             // Only log the when it has a status code of 500 or higher, or when it not is a HttpException.
-            o.ShouldLogException = exception => (exception is HttpExceptionBase httpException && (int)httpException.StatusCode >= 500) || !(exception is HttpExceptionBase);
+            o.ShouldLogException = exception => (exception is HttpExceptionBase httpException && (int)httpException.StatusCode >= 500) || exception is not HttpExceptionBase;
 
             // default exception mapper for mapping to Problem Details
             o.ExceptionMapper<Exception, ProblemDetailsExceptionMapper<Exception>>();

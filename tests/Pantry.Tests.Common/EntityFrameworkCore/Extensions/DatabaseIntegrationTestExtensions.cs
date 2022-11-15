@@ -91,15 +91,13 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            await appDbContext.Database.EnsureCreatedAsync();
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        await appDbContext.Database.EnsureCreatedAsync();
 
-            if (setupAction != null)
-            {
-                setupAction(appDbContext);
-                await appDbContext.SaveChangesAsync();
-            }
+        if (setupAction != null)
+        {
+            setupAction(appDbContext);
+            await appDbContext.SaveChangesAsync();
         }
     }
 
@@ -115,15 +113,13 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            appDbContext.Database.EnsureCreated();
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        appDbContext.Database.EnsureCreated();
 
-            if (setupAction != null)
-            {
-                setupAction(appDbContext);
-                appDbContext.SaveChanges();
-            }
+        if (setupAction != null)
+        {
+            setupAction(appDbContext);
+            appDbContext.SaveChanges();
         }
     }
 
@@ -139,9 +135,7 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            assertAction(appDbContext);
-        }
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        assertAction(appDbContext);
     }
 }

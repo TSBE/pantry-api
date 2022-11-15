@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Pantry.Common.Diagnostics.HealthChecks;
+﻿namespace Pantry.Common.Diagnostics.HealthChecks;
 
 /// <summary>
 ///     Defines common constants which are used for health checks.
@@ -12,7 +10,6 @@ public static class HealthCheckConstants
     ///     Defines the possible tags to be assigned to health checks.
     ///     Use tags to group health checks by their purpose.
     /// </summary>
-    [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "By design.")]
     public static class Tags
     {
         /// <summary>
@@ -34,7 +31,6 @@ public static class HealthCheckConstants
     /// <summary>
     ///     Defines the endpoints which exposes the health checks.
     /// </summary>
-    [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "By design.")]
     public static class Endpoints
     {
         /// <summary>

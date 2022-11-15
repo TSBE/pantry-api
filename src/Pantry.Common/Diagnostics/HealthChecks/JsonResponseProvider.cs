@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -8,7 +7,6 @@ namespace Pantry.Common.Diagnostics.HealthChecks;
 
 internal static class JsonResponseProvider
 {
-    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Framework demand.")]
     public static async Task WriteJsonResponseAsync(HealthReport healthReport, bool includeDetails, Stream body)
     {
         var options = new JsonWriterOptions
