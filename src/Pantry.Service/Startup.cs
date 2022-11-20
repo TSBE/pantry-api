@@ -12,6 +12,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Opw.HttpExceptions;
 using Opw.HttpExceptions.AspNetCore;
 using Opw.HttpExceptions.AspNetCore.Mappers;
@@ -98,15 +99,18 @@ public class Startup
         });
         services.AddSwaggerGen();
 
+        // Configures the most standard JWT authentication
+        services.AddJwtAuthentication(Configuration);
+
         var connectionString = Configuration.GetConnectionString("AppDatabase");
-        Action<IServiceProvider, DbContextOptionsBuilder> dbContextOptions = (_, builder) =>
+        void DbContextOptions(IServiceProvider serviceProvider, DbContextOptionsBuilder builder) =>
             builder.UseNpgsql(connectionString, options => options.CommandTimeout(15))
             .UseSnakeCaseNamingConvention();
 
-        services.AddPooledDbContextFactory<AppDbContext>(dbContextOptions);
+        services.AddPooledDbContextFactory<AppDbContext>(DbContextOptions);
 
         // This is just required for the HealthCheck, since it does not (yet?) work with the Factory.
-        services.AddDbContext<AppDbContext>(dbContextOptions);
+        services.AddDbContext<AppDbContext>(DbContextOptions);
 
         // Must be registered and started before any other hosted service that is using the database.
         if (!_environment.IsIntegrationTest())
@@ -136,6 +140,9 @@ public class Startup
             // app.UseDeveloperExceptionPage();
         }
 
+        // Required. Used for authentication.
+        app.UseAuthentication();
+
         // Allow Swagger ui for anonymous.
         app.UseStaticFiles();
         app.UseSwagger(
@@ -157,6 +164,8 @@ public class Startup
 
         if (env.IsDevelopment() || env.IsIntegrationTest())
         {
+            // Add the backdoor middleware in between the Authentication and Authorization ones
+            app.UseBackdoorAuthentication("user@test.com", "pantry:read-write");
         }
 
         app.UseAuthorization();

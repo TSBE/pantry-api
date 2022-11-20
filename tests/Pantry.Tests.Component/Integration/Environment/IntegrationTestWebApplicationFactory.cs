@@ -20,7 +20,9 @@ public class IntegrationTestWebApplicationFactory : IntegrationTestWebApplicatio
         _servicesConfigAction = servicesConfigAction;
     }
 
+#pragma warning disable IDE0060 // Remove unused parameter
     public static async Task<IntegrationTestWebApplicationFactory> CreateAsync(ITestOutputHelper outputHelper, Action<IServiceCollection>? servicesConfigAction = null)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
         IntegrationTestWebApplicationFactory testApplication = new(servicesConfigAction);
         await testApplication.SetupDatabaseAsync<AppDbContext>();
