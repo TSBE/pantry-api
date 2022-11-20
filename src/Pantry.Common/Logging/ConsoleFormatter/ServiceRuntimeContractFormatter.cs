@@ -11,7 +11,7 @@ internal sealed class ServiceRuntimeContractFormatter : Microsoft.Extensions.Log
 {
     public const string FormatterName = nameof(ServiceRuntimeContractFormatter);
 
-    private readonly IDisposable _optionsReloadToken;
+    private readonly IDisposable? _optionsReloadToken;
 
     private ServiceRuntimeContractFormatterOptions _formatterOptions = null!;
 
@@ -41,7 +41,7 @@ internal sealed class ServiceRuntimeContractFormatter : Microsoft.Extensions.Log
     }
 
     /// <inheritdoc />
-    public override void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider scopeProvider, TextWriter textWriter)
+    public override void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, TextWriter textWriter)
     {
         // Example:
         // 2021-55-05 08:01:01.075 level=INFO eventId=2 eventName=RequestFinished sourceContext="Microsoft.AspNetCore.Hosting.Diagnostics"
