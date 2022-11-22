@@ -15,7 +15,18 @@ public class AppDbContext : DbContext
     {
     }
 
+    public DbSet<Account> Accounts { get; set; } = null!;
+
+    public DbSet<Article> Articles { get; set; } = null!;
+
     public DbSet<Device> Devices { get; set; } = null!;
+
+    public DbSet<Household> Households { get; set; } = null!;
+
+    public DbSet<Invitation> Invitations { get; set; } = null!;
+
+    public DbSet<StorageLocation> StorageLocations { get; set; } = null!;
+
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
