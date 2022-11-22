@@ -9,6 +9,7 @@ namespace Pantry.Common;
 /// </summary>
 public class CustomJsonConverterForType : JsonConverter<Type>
 {
+    /// <inheritdoc/>
     public override Type Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
@@ -26,6 +27,7 @@ public class CustomJsonConverterForType : JsonConverter<Type>
         throw new NotSupportedException();
     }
 
+    /// <inheritdoc/>
     public override void Write(
         Utf8JsonWriter writer,
         Type value,

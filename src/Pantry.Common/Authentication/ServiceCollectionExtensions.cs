@@ -64,7 +64,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddJwtAuthentication(
         this IServiceCollection services,
         IConfiguration configuration,
-        IEnumerable<string> configSectionsKeys,
+        IEnumerable<string>? configSectionsKeys,
         Action<AuthorizationOptions>? configureAuthorizationAction = null) =>
         services.AddJwtAuthentication(
             configSectionsKeys.Select(key => configuration.GetRequiredSection(key).Get<JwtTokenSettings>()),
