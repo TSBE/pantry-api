@@ -24,7 +24,7 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         var commandHandler = new CreateAccountCommandHandler(
             Substitute.For<ILogger<CreateAccountCommandHandler>>(),
             testDatabase,
-            PrincipalUser);
+            PrincipalOfJohnDoe);
 
         // Act
         var act = await commandHandler.ExecuteAsync(new CreateAccountCommand("Jane", "Doe"));
@@ -32,7 +32,7 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         // Assert
         act.FirstName.Should().BeEquivalentTo("Jane");
         act.LastName.Should().BeEquivalentTo("Doe");
-        act.OAuhtId.Should().BeEquivalentTo(PrincipalAuth0Id);
+        act.OAuhtId.Should().BeEquivalentTo(PrincipalJohnDoeId);
         act.FriendsCode.Should().NotBeEmpty();
     }
 
@@ -40,7 +40,7 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
     public async Task ExecuteAsync_ShouldUpdateAccount()
     {
         // Arrange
-        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = PrincipalAuth0Id };
+        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = PrincipalJohnDoeId };
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase(
         dbContext =>
@@ -50,7 +50,7 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         var commandHandler = new CreateAccountCommandHandler(
             Substitute.For<ILogger<CreateAccountCommandHandler>>(),
             testDatabase,
-            PrincipalUser);
+            PrincipalOfJohnDoe);
 
         // Act
         var act = await commandHandler.ExecuteAsync(new CreateAccountCommand("John", "Smith"));
@@ -58,7 +58,7 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         // Assert
         act.FirstName.Should().BeEquivalentTo("John");
         act.LastName.Should().BeEquivalentTo("Smith");
-        act.OAuhtId.Should().BeEquivalentTo(PrincipalAuth0Id);
+        act.OAuhtId.Should().BeEquivalentTo(PrincipalJohnDoeId);
         act.FriendsCode.Should().Be(account.FriendsCode);
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,14 +39,14 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
-    /// Gets device by id.
+    /// Gets device by installationId.
     /// </summary>
     /// <returns>List of all devices.</returns>
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceListResponse))]
-    public async Task<IActionResult> GetDeviceByIdAsync(long id)
+    [HttpGet("{installationId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
+    public async Task<IActionResult> GetDeviceByIdAsync(Guid installationId)
     {
-        DeviceResponse device = (await _queryPublisher.ExecuteAsync(new DeviceByIdQuery(id))).ToDtoNotNull();
+        DeviceResponse device = (await _queryPublisher.ExecuteAsync(new DeviceByIdQuery(installationId))).ToDtoNotNull();
         return Ok(device);
     }
 
@@ -60,12 +61,38 @@ public class DeviceController : ControllerBase
     {
         DeviceResponse device = (await _commandPublisher.ExecuteAsync(
             new CreateDeviceCommand(
-                deviceRequest.DeviceToken,
                 deviceRequest.InstallationId,
                 deviceRequest.Model,
                 deviceRequest.Name,
-                deviceRequest.Platform.ToModelNotNull()))).ToDto();
+                deviceRequest.Platform.ToModelNotNull(),
+                deviceRequest.DeviceToken))).ToDto();
 
         return Ok(device);
+    }
+
+    /// <summary>
+    /// Update device.
+    /// </summary>
+    /// <returns>device.</returns>
+    [HttpPut("{installationId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> UpdateDeviceAsync([FromBody] DeviceUpdateRequest deviceUpdateRequest, Guid installationId)
+    {
+        DeviceResponse device = (await _commandPublisher.ExecuteAsync(new UpdateDeviceCommand(installationId, deviceUpdateRequest.Name, deviceUpdateRequest.DeviceToken))).ToDtoNotNull();
+        return Ok(device);
+    }
+
+    /// <summary>
+    /// Delete device.
+    /// </summary>
+    /// <returns>no content.</returns>
+    [HttpDelete("{installationId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> DeleteDeviceAsync(Guid installationId)
+    {
+        await _commandPublisher.ExecuteAsync(new DeleteDeviceCommand(installationId));
+        return NoContent();
     }
 }

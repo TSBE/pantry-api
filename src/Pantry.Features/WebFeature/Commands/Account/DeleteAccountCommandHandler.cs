@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pantry.Common.Authentication;
 using Pantry.Core.Persistence;
-using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Diagnostics;
 
 namespace Pantry.Features.WebFeature.Commands;

@@ -14,32 +14,34 @@ using Xunit;
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
 [Trait("Category", "Unit")]
-public class DeleteAccountCommandHandlerFixture : BaseFixture
+public class DeleteDeviceCommandHandlerFixture : BaseFixture
 {
     [Fact]
     public async Task ExecuteAsync_ShouldDeleteDevice()
     {
         // Arrange
-        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = PrincipalJohnDoeId };
+        var device = new Device { Account = AccountJohnDoe, InstallationId = Guid.NewGuid(), Name = "iPhone 14", Model = "Foo`s iPhone", Platform = Core.Persistence.Enums.DevicePlatformType.IOS };
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase(
         dbContext =>
         {
-            dbContext.Accounts.Add(account);
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Devices.Add(device);
         });
-        var commandHandler = new DeleteAccountCommandHandler(
-            Substitute.For<ILogger<DeleteAccountCommandHandler>>(),
+        var commandHandler = new DeleteDeviceCommandHandler(
+            Substitute.For<ILogger<DeleteDeviceCommandHandler>>(),
             testDatabase,
             PrincipalOfJohnDoe);
 
         // Act
-        await commandHandler.ExecuteAsync(new DeleteAccountCommand());
+        await commandHandler.ExecuteAsync(new DeleteDeviceCommand(device.InstallationId));
 
         // Assert
         testDatabase.AssertDatabaseContent(
             dbContext =>
             {
-                dbContext.Accounts.Should().HaveCount(0);
+                dbContext.Accounts.Should().HaveCount(1);
+                dbContext.Devices.Should().HaveCount(0);
             });
     }
 
@@ -49,13 +51,13 @@ public class DeleteAccountCommandHandlerFixture : BaseFixture
         // Arrange
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase();
-        var commandHandler = new DeleteAccountCommandHandler(
-            Substitute.For<ILogger<DeleteAccountCommandHandler>>(),
+        var commandHandler = new DeleteDeviceCommandHandler(
+            Substitute.For<ILogger<DeleteDeviceCommandHandler>>(),
             testDatabase,
             PrincipalOfJohnDoe);
 
         // Act
-        Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeleteAccountCommand());
+        Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeleteDeviceCommand(Guid.NewGuid()));
 
         // Assert
         await act.Should().ThrowAsync<EntityNotFoundException>();

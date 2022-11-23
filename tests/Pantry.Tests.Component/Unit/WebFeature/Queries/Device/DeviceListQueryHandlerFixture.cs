@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -18,21 +19,56 @@ public class DeviceListQueryHandlerFixture : BaseFixture
     [Fact]
     public async Task ExecuteAsync_ShouldReturn()
     {
-        //using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
-        //testDatabase.SetupDatabase(
-        //    dbContext =>
-        //    {
-        //        dbContext.Devices.Add(new Device { Name = "NotNullName", Model = "NotNullModel" });
-        //    });
+        // Arrange
+        var device1 = new Device { Account = AccountJohnDoe, InstallationId = Guid.NewGuid(), Name = "iPhone 14", Model = "Foo`s iPhone", Platform = Core.Persistence.Enums.DevicePlatformType.IOS };
+        var device2 = new Device { Account = AccountJohnDoe, InstallationId = Guid.NewGuid(), Name = "Samsung Galaxy S22", Model = "Foo`s Galaxy", Platform = Core.Persistence.Enums.DevicePlatformType.ANDROID };
 
-        //var queryHandler = new DeviceListQueryHandler(
-        //    Substitute.For<ILogger<DeviceListQueryHandler>>(),
-        //    testDatabase);
+        using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
+        testDatabase.SetupDatabase(
+        dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Devices.Add(device1);
+            dbContext.Devices.Add(device2);
+        });
 
-        //// Act
-        //IReadOnlyCollection<Device> reports = await queryHandler.ExecuteAsync(new DeviceListQuery());
+        var queryHandler = new DeviceListQueryHandler(
+            Substitute.For<ILogger<DeviceListQueryHandler>>(),
+            testDatabase,
+            PrincipalOfJohnDoe);
 
-        //// Assert
-        //reports.Should().HaveCount(1);
+        // Act
+        IReadOnlyCollection<Device> devices = await queryHandler.ExecuteAsync(new DeviceListQuery());
+
+        // Assert
+        devices.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ShouldReturnEmpty()
+    {
+        // Arrange
+        var device1 = new Device { Account = AccountJohnDoe, InstallationId = Guid.NewGuid(), Name = "iPhone 14", Model = "Foo`s iPhone", Platform = Core.Persistence.Enums.DevicePlatformType.IOS };
+        var device2 = new Device { Account = AccountJohnDoe, InstallationId = Guid.NewGuid(), Name = "Samsung Galaxy S22", Model = "Foo`s Galaxy", Platform = Core.Persistence.Enums.DevicePlatformType.ANDROID };
+
+        using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
+        testDatabase.SetupDatabase(
+        dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Devices.Add(device1);
+            dbContext.Devices.Add(device2);
+        });
+
+        var queryHandler = new DeviceListQueryHandler(
+            Substitute.For<ILogger<DeviceListQueryHandler>>(),
+            testDatabase,
+            PrincipalTestUser1);
+
+        // Act
+        IReadOnlyCollection<Device> devices = await queryHandler.ExecuteAsync(new DeviceListQuery());
+
+        // Assert
+        devices.Should().HaveCount(0);
     }
 }

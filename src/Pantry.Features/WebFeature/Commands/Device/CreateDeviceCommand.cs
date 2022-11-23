@@ -5,4 +5,4 @@ using Silverback.Messaging.Messages;
 
 namespace Pantry.Features.WebFeature.Commands;
 
-public record CreateDeviceCommand(string? DeviceToken, Guid InstallationId, string Model, string Name, DevicePlatformType Platform) : ICommand<Device>;
+public record CreateDeviceCommand(Guid InstallationId, string Model, string Name, DevicePlatformType Platform, string? DeviceToken) : ICommand<Device>;
