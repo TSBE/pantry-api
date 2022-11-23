@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
+using Pantry.Common;
 using Pantry.Core.Persistence.Entities;
 using Xunit.Abstractions;
 
@@ -14,9 +18,17 @@ public abstract class BaseControllerFixture
 
     protected BaseControllerFixture(ITestOutputHelper testOutputHelper)
     {
+        JsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+        JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
         TestOutputHelper = testOutputHelper;
         PrincipalUser = CreatePrincipal(PrincipalAuth0Id);
     }
+
+    protected JsonSerializerOptions JsonSerializerOptions { get; }
 
     protected ITestOutputHelper TestOutputHelper { get; }
 

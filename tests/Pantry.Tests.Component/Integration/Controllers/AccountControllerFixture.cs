@@ -25,9 +25,7 @@ public class AccountControllerFixture : BaseControllerFixture
     public async Task PutAccountAsync_ShouldReturnAccount()
     {
         // Arrange
-        await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper, services =>
-        {
-        });
+        await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
 
         using HttpClient httpClient = testApplication.CreateClient();
 

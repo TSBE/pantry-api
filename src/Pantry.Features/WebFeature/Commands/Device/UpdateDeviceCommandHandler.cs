@@ -7,18 +7,18 @@ using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Diagnostics;
 
-namespace Pantry.Features.WebFeature.Queries;
+namespace Pantry.Features.WebFeature.Commands;
 
-public class DeviceByIdQueryHandler
+public class UpdateDeviceCommandHandler
 {
     private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
-    private readonly ILogger<DeviceByIdQueryHandler> _logger;
+    private readonly ILogger<UpdateDeviceCommandHandler> _logger;
 
     private readonly IPrincipal _principal;
 
-    public DeviceByIdQueryHandler(
-        ILogger<DeviceByIdQueryHandler> logger,
+    public UpdateDeviceCommandHandler(
+        ILogger<UpdateDeviceCommandHandler> logger,
         IDbContextFactory<AppDbContext> dbContextFactory,
         IPrincipal principal)
     {
@@ -27,13 +27,19 @@ public class DeviceByIdQueryHandler
         _principal = principal;
     }
 
-    public async Task<Device> ExecuteAsync(DeviceByIdQuery query)
+    public async Task<Device> ExecuteAsync(UpdateDeviceCommand command)
     {
-        _logger.ExecutingQuery(nameof(DeviceByIdQuery));
-
+        _logger.ExecutingCommand(nameof(UpdateDeviceCommand));
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
 
         var auth0Id = _principal.GetAuth0IdOrThrow();
-        return await appDbContext.Devices.Include(x => x.Account).AsNoTracking().FirstOrThrowAsync(c => c.Account.OAuhtId == auth0Id && c.InstallationId == query.InstallationId);
+        var device = await appDbContext.Devices.Include(x => x.Account).FirstOrThrowAsync(c => c.Account.OAuhtId == auth0Id && c.InstallationId == command.InstallationId);
+
+        device.Name = command.Name;
+        device.DeviceToken = command.DeviceToken;
+
+        await appDbContext.SaveChangesAsync();
+
+        return device;
     }
 }

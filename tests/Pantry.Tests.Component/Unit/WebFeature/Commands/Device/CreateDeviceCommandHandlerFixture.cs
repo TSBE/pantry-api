@@ -19,21 +19,27 @@ public class CreateDeviceCommandHandlerFixture : BaseFixture
     public async Task ExecuteAsync_ShouldCreateDevice()
     {
         // Arrange
-        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = "dummy" };
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase(
             dbContext =>
             {
-                dbContext.Accounts.Add(account);
+                dbContext.Accounts.Add(AccountJohnDoe);
             });
         var commandHandler = new CreateDeviceCommandHandler(
             Substitute.For<ILogger<CreateDeviceCommandHandler>>(),
-            testDatabase);
+            testDatabase,
+            PrincipalOfJohnDoe);
+
+        var installationId = Guid.NewGuid();
 
         // Act
-        // var act = await commandHandler.ExecuteAsync(new CreateDeviceCommand(null, Guid.NewGuid(), "iPhone 14", "Foo`s iPhone", Core.Persistence.Enums.DevicePlatformType.IOS));
+        var act = await commandHandler.ExecuteAsync(new CreateDeviceCommand(installationId, "iPhone 14", "Foo`s iPhone", Core.Persistence.Enums.DevicePlatformType.IOS, null));
 
         // Assert
-        // act.Name.Should().BeEquivalentTo("Foo`s iPhone");
+        act.InstallationId.Should().Be(installationId);
+        act.Model.Should().BeEquivalentTo("iPhone 14");
+        act.Name.Should().BeEquivalentTo("Foo`s iPhone");
+        act.Platform.Should().Be(Core.Persistence.Enums.DevicePlatformType.IOS);
+        act.DeviceToken.Should().BeNull();
     }
 }

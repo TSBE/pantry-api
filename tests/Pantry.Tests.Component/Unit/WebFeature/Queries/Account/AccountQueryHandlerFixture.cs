@@ -20,7 +20,7 @@ public class AccountQueryHandlerFixture : BaseFixture
     public async Task ExecuteAsync_ShouldReturn()
     {
         // Arrange
-        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = PrincipalAuth0Id };
+        var account = new Account { AccountId = 1, FirstName = "Jane", LastName = "Doe", FriendsCode = Guid.NewGuid(), OAuhtId = PrincipalJohnDoeId };
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase(
         dbContext =>
@@ -28,7 +28,7 @@ public class AccountQueryHandlerFixture : BaseFixture
             dbContext.Accounts.Add(account);
         });
 
-        var queryHandler = new AccountQueryHandler(Substitute.For<ILogger<AccountQueryHandler>>(), testDatabase, PrincipalUser);
+        var queryHandler = new AccountQueryHandler(Substitute.For<ILogger<AccountQueryHandler>>(), testDatabase, PrincipalOfJohnDoe);
 
         // Act
         Account actual = await queryHandler.ExecuteAsync(new AccountQuery());
@@ -44,7 +44,7 @@ public class AccountQueryHandlerFixture : BaseFixture
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase();
 
-        var queryHandler = new AccountQueryHandler(Substitute.For<ILogger<AccountQueryHandler>>(), testDatabase, PrincipalUser);
+        var queryHandler = new AccountQueryHandler(Substitute.For<ILogger<AccountQueryHandler>>(), testDatabase, PrincipalOfJohnDoe);
 
         // Act
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new AccountQuery());
