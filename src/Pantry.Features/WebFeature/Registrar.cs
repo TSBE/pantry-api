@@ -35,11 +35,14 @@ public static class Registrar
 
         // CommandHandlers
         silverbackBuilder
+            .AddScopedSubscriber<CreateAccountCommandHandler>()
+            .AddScopedSubscriber<DeleteAccountCommandHandler>()
             .AddScopedSubscriber<CreateDeviceCommandHandler>()
             ;
 
         // QueryHandlers
         silverbackBuilder
+            .AddScopedSubscriber<AccountQueryHandler>()
             .AddScopedSubscriber<DeviceByIdQueryHandler>()
             .AddScopedSubscriber<DeviceListQueryHandler>()
             ;

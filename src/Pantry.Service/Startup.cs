@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Security.Principal;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
@@ -102,6 +104,10 @@ public class Startup
         // Configures the most standard JWT authentication
         services.AddJwtAuthentication(Configuration);
 
+        services.AddTransient<IPrincipal>(provider =>
+        provider.GetService<IHttpContextAccessor>()?.HttpContext?.User
+        ?? new GenericPrincipal(new GenericIdentity("nocontext"), new string[1]));
+
         var connectionString = Configuration.GetConnectionString("AppDatabase");
         void DbContextOptions(IServiceProvider serviceProvider, DbContextOptionsBuilder builder) =>
             builder.UseNpgsql(connectionString, options => options.CommandTimeout(15))
@@ -164,8 +170,11 @@ public class Startup
 
         if (env.IsDevelopment() || env.IsIntegrationTest())
         {
+            // Enable for sensitive data logging.
+            // IdentityModelEventSource.ShowPII = true;
+
             // Add the backdoor middleware in between the Authentication and Authorization ones
-            app.UseBackdoorAuthentication("user@test.com", "pantry:read-write");
+            app.UseBackdoorAuthentication("auth0|backdoor1234567890");
         }
 
         app.UseAuthorization();
