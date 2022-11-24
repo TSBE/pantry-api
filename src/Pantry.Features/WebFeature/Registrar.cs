@@ -42,6 +42,7 @@ public static class Registrar
             .AddScopedSubscriber<UpdateDeviceCommandHandler>()
             .AddScopedSubscriber<DeleteDeviceCommandHandler>()
 
+            .AddScopedSubscriber<CreateHouseholdCommandHandler>()
             ;
 
         // QueryHandlers
@@ -50,6 +51,8 @@ public static class Registrar
 
             .AddScopedSubscriber<DeviceByIdQueryHandler>()
             .AddScopedSubscriber<DeviceListQueryHandler>()
+
+            .AddScopedSubscriber<HouseholdQueryHandler>()
             ;
     }
 }

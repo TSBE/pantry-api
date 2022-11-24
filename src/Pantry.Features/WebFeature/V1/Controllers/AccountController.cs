@@ -43,7 +43,7 @@ public class AccountController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateDeviceAsync([FromBody] AccountRequest accountRequest)
+    public async Task<IActionResult> CreateAccountAsync([FromBody] AccountRequest accountRequest)
     {
         AccountResponse account = (await _commandPublisher.ExecuteAsync(new CreateAccountCommand(accountRequest.FirstName, accountRequest.LastName))).ToDtoNotNull();
         return Ok(account);

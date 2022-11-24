@@ -1,10 +1,10 @@
 ﻿using Pantry.Core.Mappers;
-using Dto = Pantry.Features.WebFeature.V1.Controllers.Enums.DevicePlatformType;
-using Persistence = Pantry.Core.Persistence.Enums.DevicePlatformType;
+using Dto = Pantry.Features.WebFeature.V1.Controllers.Enums.SubscriptionType;
+using Persistence = Pantry.Core.Persistence.Enums.SubscriptionType;
 
 namespace Pantry.Features.WebFeature.V1.Controllers.Mappers;
 
-public static class DevicePlatformTypeMappings
+public static class SubscriptionTypeMappings
 {
     private static readonly EnumDtoModelMapping<Dto, Persistence> Mapping = new();
 
