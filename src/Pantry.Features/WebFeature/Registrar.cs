@@ -50,6 +50,10 @@ public static class Registrar
             .AddScopedSubscriber<CreateStorageLocationCommandHandler>()
             .AddScopedSubscriber<UpdateStorageLocationCommandHandler>()
             .AddScopedSubscriber<DeleteStorageLocationCommandHandler>()
+
+            .AddScopedSubscriber<CreateArticleCommandHandler>()
+            .AddScopedSubscriber<UpdateArticleCommandHandler>()
+            .AddScopedSubscriber<DeleteArticleCommandHandler>()
             ;
 
         // QueryHandlers
@@ -63,6 +67,9 @@ public static class Registrar
 
             .AddScopedSubscriber<StorageLocationByIdQueryHandler>()
             .AddScopedSubscriber<StorageLocationListQueryHandler>()
+
+            .AddScopedSubscriber<ArticleByIdQueryHandler>()
+            .AddScopedSubscriber<ArticleListQueryHandler>()
             ;
     }
 }

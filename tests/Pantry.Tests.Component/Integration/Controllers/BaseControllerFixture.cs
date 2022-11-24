@@ -57,6 +57,14 @@ public abstract class BaseControllerFixture
         OwnerId = 1
     };
 
+    protected StorageLocation StorageLocationOfJohnDoe { get; } = new()
+    {
+        StorageLocationId = 1,
+        HouseholdId = 1,
+        Name = "Unittest Location",
+        Description = "Test Description"
+    };
+
     private static IPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
     {
         var claims = new List<Claim>()

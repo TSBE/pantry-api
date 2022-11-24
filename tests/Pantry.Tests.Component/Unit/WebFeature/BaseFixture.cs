@@ -58,6 +58,14 @@ namespace Pantry.Tests.Component.Unit.WebFeature
             OwnerId = 2
         };
 
+        protected StorageLocation StorageLocationOfJohnDoe { get; } = new()
+        {
+            StorageLocationId = 1,
+            HouseholdId = 1,
+            Name = "Unittest Location",
+            Description = "Test Description"
+        };
+
         protected IPrincipal PrincipalEmpty { get; } = new ClaimsPrincipal(new ClaimsIdentity());
 
         protected IPrincipal PrincipalOfJohnDoe { get; }
