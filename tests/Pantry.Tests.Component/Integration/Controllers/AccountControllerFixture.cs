@@ -47,7 +47,7 @@ public class AccountControllerFixture : BaseControllerFixture
             dbContext.Accounts.FirstOrDefault()!.FirstName.Should().Be(expectedAccountRequest.FirstName);
             dbContext.Accounts.FirstOrDefault()!.LastName.Should().Be(expectedAccountRequest.LastName);
             dbContext.Accounts.FirstOrDefault()!.FriendsCode.Should().NotBeEmpty();
-            dbContext.Accounts.FirstOrDefault()!.OAuhtId.Should().Be(PrincipalAuth0Id);
+            dbContext.Accounts.FirstOrDefault()!.OAuhtId.Should().Be(PrincipalJohnDoeId);
         });
     }
 

@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Pantry.Common;
+using Pantry.Common.Authentication;
 using Pantry.Core.Persistence.Entities;
 using Xunit.Abstractions;
 
@@ -14,7 +15,7 @@ namespace Pantry.Tests.Component.Integration.Controllers;
 
 public abstract class BaseControllerFixture
 {
-    protected const string PrincipalAuth0Id = "auth0|backdoor1234567890";
+    protected const string PrincipalJohnDoeId = "auth0|backdoor1234567890";
 
     protected BaseControllerFixture(ITestOutputHelper testOutputHelper)
     {
@@ -25,7 +26,8 @@ public abstract class BaseControllerFixture
         JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 
         TestOutputHelper = testOutputHelper;
-        PrincipalUser = CreatePrincipal(PrincipalAuth0Id);
+        PrincipalOfJohnDoe = CreatePrincipal(PrincipalJohnDoeId);
+        PrincipalOfJohnDoeWithHousehold = CreatePrincipal(PrincipalJohnDoeId, new Claim(CustomClaimTypes.HOUSEHOLDID, "1"));
     }
 
     protected JsonSerializerOptions JsonSerializerOptions { get; }
@@ -34,7 +36,9 @@ public abstract class BaseControllerFixture
 
     protected IPrincipal PrincipalEmpty { get; } = new ClaimsPrincipal(new ClaimsIdentity());
 
-    protected IPrincipal PrincipalUser { get; }
+    protected IPrincipal PrincipalOfJohnDoeWithHousehold { get; }
+
+    protected IPrincipal PrincipalOfJohnDoe { get; }
 
     protected Account AccountJohnDoe { get; } = new()
     {
@@ -42,15 +46,25 @@ public abstract class BaseControllerFixture
         FirstName = "John",
         LastName = "Doe",
         FriendsCode = Guid.NewGuid(),
-        OAuhtId = PrincipalAuth0Id
+        OAuhtId = PrincipalJohnDoeId
     };
 
-    private static IPrincipal CreatePrincipal(string userId)
+    protected Household HouseholdOfJohnDoe { get; } = new()
+    {
+        HouseholdId = 1,
+        Name = "John's household",
+        SubscriptionType = Core.Persistence.Enums.SubscriptionType.FREE,
+        OwnerId = 1
+    };
+
+    private static IPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
     {
         var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString(CultureInfo.InvariantCulture)),
             };
+
+        claims.AddRange(moreClaims);
 
         return new ClaimsPrincipal(new ClaimsIdentity(claims));
     }

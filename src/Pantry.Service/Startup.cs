@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +21,7 @@ using Opw.HttpExceptions;
 using Opw.HttpExceptions.AspNetCore;
 using Opw.HttpExceptions.AspNetCore.Mappers;
 using Pantry.Common;
+using Pantry.Common.Authentication;
 using Pantry.Common.Diagnostics.HealthChecks;
 using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
@@ -174,7 +177,9 @@ public class Startup
             // IdentityModelEventSource.ShowPII = true;
 
             // Add the backdoor middleware in between the Authentication and Authorization ones
-            app.UseBackdoorAuthentication("auth0|backdoor1234567890");
+            app.UseBackdoorAuthentication(
+                "auth0|backdoor1234567890",
+                claimsProvider: userId => { return new List<Claim> { new Claim(CustomClaimTypes.HOUSEHOLDID, "1") }; });
         }
 
         app.UseAuthorization();

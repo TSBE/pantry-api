@@ -32,7 +32,7 @@ public class DeleteDeviceCommandHandler
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
 
         var auth0Id = _principal.GetAuth0IdOrThrow();
-        var device = await appDbContext.Devices.Include(x => x.Account).AsNoTracking().FirstOrThrowAsync(c => c.Account.OAuhtId == auth0Id && c.InstallationId == command.InstallationId);
+        var device = await appDbContext.Devices.Include(x => x.Account).FirstOrThrowAsync(c => c.Account.OAuhtId == auth0Id && c.InstallationId == command.InstallationId);
 
         appDbContext.Devices.Remove(device);
         await appDbContext.SaveChangesAsync();

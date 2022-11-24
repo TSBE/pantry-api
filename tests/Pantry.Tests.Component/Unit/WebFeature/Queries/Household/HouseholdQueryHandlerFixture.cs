@@ -31,7 +31,7 @@ public class HouseholdQueryHandlerFixture : BaseFixture
             dbContext.Households.Add(household);
         });
 
-        var queryHandler = new HouseholdQueryHandler(Substitute.For<ILogger<HouseholdQueryHandler>>(), testDatabase, PrincipalOfJohnDoe);
+        var queryHandler = new HouseholdQueryHandler(Substitute.For<ILogger<HouseholdQueryHandler>>(), testDatabase, PrincipalOfJohnDoeWithHousehold);
 
         // Act
         Household actual = await queryHandler.ExecuteAsync(new HouseholdQuery());
