@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pantry.Features.WebFeature.Authentication;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Configuration;
 using Pantry.Features.WebFeature.Queries;
@@ -30,6 +32,7 @@ public static class Registrar
         }).AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssembly(typeof(Registrar).Assembly, ServiceLifetime.Scoped);
         services.Configure<WebFeatureConfiguration>(configuration.GetRequiredSection(WebFeatureConfiguration.Name));
+        services.AddTransient<IClaimsTransformation, HouseholdClaimsTransformation>();
 
         ISilverbackBuilder silverbackBuilder = services.ConfigureSilverback();
 
@@ -43,6 +46,10 @@ public static class Registrar
             .AddScopedSubscriber<DeleteDeviceCommandHandler>()
 
             .AddScopedSubscriber<CreateHouseholdCommandHandler>()
+
+            .AddScopedSubscriber<CreateStorageLocationCommandHandler>()
+            .AddScopedSubscriber<UpdateStorageLocationCommandHandler>()
+            .AddScopedSubscriber<DeleteStorageLocationCommandHandler>()
             ;
 
         // QueryHandlers
@@ -53,6 +60,9 @@ public static class Registrar
             .AddScopedSubscriber<DeviceListQueryHandler>()
 
             .AddScopedSubscriber<HouseholdQueryHandler>()
+
+            .AddScopedSubscriber<StorageLocationByIdQueryHandler>()
+            .AddScopedSubscriber<StorageLocationListQueryHandler>()
             ;
     }
 }

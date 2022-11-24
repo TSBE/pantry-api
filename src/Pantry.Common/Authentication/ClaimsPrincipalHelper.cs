@@ -32,6 +32,16 @@ public static class ClaimsPrincipalHelper
         => principal.Identity?.GetAuth0IdOrThrow()
         ?? throw new ForbiddenException(nameof(principal.Identity));
 
+    public static long? GetHouseholdId(this IPrincipal principal)
+    {
+        var value = principal.GetClaim(CustomClaimTypes.HOUSEHOLDID);
+        return long.TryParse(value, out var householdId) ? householdId : default;
+    }
+
+    public static long GetHouseholdIdOrThrow(this IPrincipal principal)
+        => principal.GetHouseholdId()
+        ?? throw new ForbiddenException(nameof(principal));
+
     public static string? GetClaim(this IPrincipal principal, string claimType) =>
          (principal.Identity as ClaimsIdentity)?.Claims
          .Where(e => e.Type == claimType)

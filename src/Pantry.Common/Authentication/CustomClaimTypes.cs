@@ -36,4 +36,9 @@ public static class CustomClaimTypes
     /// scope : space-separated list of scopes.
     /// </summary>
     public const string PERMISSIONS = "permission";
+
+    /// <summary>
+    /// household_id : string representing id of household.
+    /// </summary>
+    public const string HOUSEHOLDID = "household_id";
 }

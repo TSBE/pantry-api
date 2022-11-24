@@ -9,16 +9,16 @@ using Pantry.Features.WebFeature.Diagnostics;
 
 namespace Pantry.Features.WebFeature.Queries;
 
-public class HouseholdQueryHandler
+public class StorageLocationByIdQueryHandler
 {
     private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
-    private readonly ILogger<HouseholdQueryHandler> _logger;
+    private readonly ILogger<StorageLocationByIdQueryHandler> _logger;
 
     private readonly IPrincipal _principal;
 
-    public HouseholdQueryHandler(
-        ILogger<HouseholdQueryHandler> logger,
+    public StorageLocationByIdQueryHandler(
+        ILogger<StorageLocationByIdQueryHandler> logger,
         IDbContextFactory<AppDbContext> dbContextFactory,
         IPrincipal principal)
     {
@@ -27,13 +27,13 @@ public class HouseholdQueryHandler
         _principal = principal;
     }
 
-    public async Task<Household> ExecuteAsync(HouseholdQuery query)
+    public async Task<StorageLocation> ExecuteAsync(StorageLocationByIdQuery query)
     {
-        _logger.ExecutingQuery(nameof(HouseholdQuery));
+        _logger.ExecutingQuery(nameof(StorageLocationByIdQuery));
 
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
 
         var householdId = _principal.GetHouseholdIdOrThrow();
-        return await appDbContext.Households.AsNoTracking().FirstOrThrowAsync(c => c.HouseholdId == householdId);
+        return await appDbContext.StorageLocations.Include(i => i.Household).AsNoTracking().FirstOrThrowAsync(c => c.HouseholdId == householdId && c.StorageLocationId == query.StorageLocationId);
     }
 }
