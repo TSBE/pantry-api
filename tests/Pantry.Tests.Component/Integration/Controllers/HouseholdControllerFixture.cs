@@ -145,7 +145,6 @@ public class HouseholdControllerFixture : BaseControllerFixture
         {
             dbContext.Accounts.Count().Should().Be(1);
             dbContext.Households.Count().Should().Be(0);
-
         });
     }
 }

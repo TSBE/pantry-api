@@ -196,7 +196,6 @@ public static class ServiceCollectionExtensions
         IReadOnlyCollection<string> validAudiences,
         IEnumerable<X509Certificate2> signingKeyCertificates)
     {
-        //options.Authority = "https://pantry-mobile.eu.auth0.com";
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,

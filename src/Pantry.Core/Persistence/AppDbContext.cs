@@ -27,7 +27,6 @@ public class AppDbContext : DbContext
 
     public DbSet<StorageLocation> StorageLocations { get; set; } = null!;
 
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         SetAuditableEntityProperties();

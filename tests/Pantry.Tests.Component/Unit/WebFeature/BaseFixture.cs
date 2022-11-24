@@ -12,7 +12,6 @@ namespace Pantry.Tests.Component.Unit.WebFeature
         protected const string PrincipalJohnDoeId = "auth0|1234567890";
         protected const string PrincipalTestUser1Id = "auth0|1234567890testuser1";
 
-
         protected BaseFixture()
         {
             PrincipalOfJohnDoe = CreatePrincipal(PrincipalJohnDoeId);
@@ -33,7 +32,6 @@ namespace Pantry.Tests.Component.Unit.WebFeature
         protected IPrincipal PrincipalOfJohnDoe { get; }
 
         protected IPrincipal PrincipalTestUser1 { get; }
-
 
         private static IPrincipal CreatePrincipal(string userId)
         {
