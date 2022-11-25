@@ -63,7 +63,7 @@ public class DeviceListQueryHandlerFixture : BaseFixture
         var queryHandler = new DeviceListQueryHandler(
             Substitute.For<ILogger<DeviceListQueryHandler>>(),
             testDatabase,
-            PrincipalTestUser1);
+            PrincipalAuthenticatedUser1);
 
         // Act
         IReadOnlyCollection<Device> devices = await queryHandler.ExecuteAsync(new DeviceListQuery());

@@ -23,7 +23,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task PostAccountAsync_ShouldReturnAccount()
+    public async Task PostHouseholdAsync_ShouldReturnAccount()
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
@@ -56,7 +56,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task PostAccountAsync_ShouldThrow()
+    public async Task PostHouseholdAsync_ShouldThrow()
     {
         // Arrange
         var household = new Household { Name = "Test", SubscriptionType = Core.Persistence.Enums.SubscriptionType.FREE };
@@ -92,7 +92,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetHouseAsync_ShouldWork()
+    public async Task GetHouseholdAsync_ShouldWork()
     {
         // Arrange
         var household = new Household { Name = "Test", SubscriptionType = Core.Persistence.Enums.SubscriptionType.FREE };
@@ -123,7 +123,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetHouseAsync_ShouldThrow()
+    public async Task GetHouseholdAsync_ShouldThrow()
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);

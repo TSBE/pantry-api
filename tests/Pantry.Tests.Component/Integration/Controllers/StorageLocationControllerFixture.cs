@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
-using Pantry.Features.WebFeature.V1.Controllers.Enums;
 using Pantry.Features.WebFeature.V1.Controllers.Requests;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
 using Pantry.Tests.Component.Integration.Environment;

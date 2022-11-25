@@ -16,6 +16,7 @@ namespace Pantry.Tests.Component.Integration.Controllers;
 public abstract class BaseControllerFixture
 {
     protected const string PrincipalJohnDoeId = "auth0|backdoor1234567890";
+    protected const string PrincipalFooBarId = "auth0|0987654321";
 
     protected BaseControllerFixture(ITestOutputHelper testOutputHelper)
     {
@@ -47,6 +48,15 @@ public abstract class BaseControllerFixture
         LastName = "Doe",
         FriendsCode = Guid.NewGuid(),
         OAuhtId = PrincipalJohnDoeId
+    };
+
+    protected Account AccountFooBar { get; } = new()
+    {
+        AccountId = 2,
+        FirstName = "Foo",
+        LastName = "Bar",
+        FriendsCode = Guid.NewGuid(),
+        OAuhtId = PrincipalFooBarId
     };
 
     protected Household HouseholdOfJohnDoe { get; } = new()

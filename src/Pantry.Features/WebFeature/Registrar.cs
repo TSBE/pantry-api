@@ -54,6 +54,10 @@ public static class Registrar
             .AddScopedSubscriber<CreateArticleCommandHandler>()
             .AddScopedSubscriber<UpdateArticleCommandHandler>()
             .AddScopedSubscriber<DeleteArticleCommandHandler>()
+
+            .AddScopedSubscriber<CreateInvitationCommandHandler>()
+            .AddScopedSubscriber<AcceptInvitationCommandHandler>()
+            .AddScopedSubscriber<DeclineInvitationCommandHandler>()
             ;
 
         // QueryHandlers
@@ -70,6 +74,8 @@ public static class Registrar
 
             .AddScopedSubscriber<ArticleByIdQueryHandler>()
             .AddScopedSubscriber<ArticleListQueryHandler>()
+
+            .AddScopedSubscriber<InvitationListQueryHandler>()
             ;
     }
 }
