@@ -19,9 +19,10 @@ namespace Pantry.Tests.Component.Unit.WebFeature
         {
             PrincipalOfJohnDoe = CreatePrincipal(PrincipalJohnDoeId);
             PrincipalOfJohnDoeWithHousehold = CreatePrincipal(PrincipalJohnDoeId, new Claim(CustomClaimTypes.HOUSEHOLDID, "1"));
+            PrincipalOfFooBar = CreatePrincipal(PrincipalFooBarId);
             PrincipalOfFooBarWithHousehold = CreatePrincipal(PrincipalFooBarId, new Claim(CustomClaimTypes.HOUSEHOLDID, "2"));
-
-            PrincipalTestUser1 = CreatePrincipal(PrincipalTestUser1Id);
+            PrincipalOfFooBarWithJohnDoesHousehold = CreatePrincipal(PrincipalFooBarId, new Claim(CustomClaimTypes.HOUSEHOLDID, "1"));
+            PrincipalAuthenticatedUser1 = CreatePrincipal(PrincipalTestUser1Id);
         }
 
         protected Account AccountJohnDoe { get; } = new()
@@ -72,9 +73,14 @@ namespace Pantry.Tests.Component.Unit.WebFeature
 
         protected IPrincipal PrincipalOfJohnDoeWithHousehold { get; }
 
+        protected IPrincipal PrincipalOfFooBar { get; }
+
         protected IPrincipal PrincipalOfFooBarWithHousehold { get; }
 
-        protected IPrincipal PrincipalTestUser1 { get; }
+        protected IPrincipal PrincipalOfFooBarWithJohnDoesHousehold { get; }
+
+
+        protected IPrincipal PrincipalAuthenticatedUser1 { get; }
 
         private static IPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
         {

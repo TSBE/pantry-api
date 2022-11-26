@@ -59,7 +59,7 @@ public class UpdateDeviceCommandHandlerFixture : BaseFixture
         var commandHandler = new UpdateDeviceCommandHandler(
             Substitute.For<ILogger<UpdateDeviceCommandHandler>>(),
             testDatabase,
-            PrincipalTestUser1);
+            PrincipalAuthenticatedUser1);
 
         // Act
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new UpdateDeviceCommand(device.InstallationId, "Hacker's Device", null));

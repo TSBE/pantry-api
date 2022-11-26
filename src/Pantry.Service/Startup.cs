@@ -25,6 +25,7 @@ using Pantry.Common.Authentication;
 using Pantry.Common.Diagnostics.HealthChecks;
 using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
+using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Features.WebFeature;
 using Pantry.Service.Infrastructure;
@@ -135,6 +136,11 @@ public class Startup
     {
         // this is the first middleware component added to the pipeline
         app.UseHttpExceptions();
+
+        if (env.IsIntegrationTest())
+        {
+            app.UseDateTimeContext();
+        }
 
         // Required. Writes common Runtime and Environment Info to the log.
         logger.LogRuntimeAndEnvironmentInformation();
