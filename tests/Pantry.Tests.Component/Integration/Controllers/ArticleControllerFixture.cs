@@ -126,7 +126,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         response!.Id.Should().Be(article1.ArticleId);
         response!.Name.Should().Be(article1.Name);
         response!.Quantity.Should().Be(article1.Quantity);
-        response!.StorageLocationId.Should().Be(article1.StorageLocationId);
+        response!.StorageLocation.Id.Should().Be(article1.StorageLocationId);
     }
 
     [Fact]
