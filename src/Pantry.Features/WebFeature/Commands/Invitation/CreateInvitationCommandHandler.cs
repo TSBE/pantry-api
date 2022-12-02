@@ -50,7 +50,7 @@ public class CreateInvitationCommandHandler
             invitation = new Invitation
             {
                 ValidUntilDate = DateTimeProvider.UtcNow.AddDays(10),
-                Creator = account,
+                CreatorId = account.AccountId,
                 Household = account.Household,
                 FriendsCode = command.FriendsCode
             };

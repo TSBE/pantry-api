@@ -33,6 +33,6 @@ public class AccountQueryHandler
 
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
         var auth0Id = _principal.GetAuth0IdOrThrow();
-        return await appDbContext.Accounts.AsNoTracking().FirstOrThrowAsync(c => c.OAuhtId == auth0Id);
+        return await appDbContext.Accounts.Include(i => i.Household).AsNoTracking().FirstOrThrowAsync(c => c.OAuhtId == auth0Id);
     }
 }

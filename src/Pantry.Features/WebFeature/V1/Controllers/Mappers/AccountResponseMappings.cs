@@ -15,6 +15,8 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Mappers
                     config.ForMember(o => o.FriendsCode, dest => dest.MapFrom(o => o.FriendsCode));
                     config.ForMember(o => o.FirstName, dest => dest.MapFrom(o => o.FirstName));
                     config.ForMember(o => o.LastName, dest => dest.MapFrom(o => o.LastName));
+                    config.ForMember(o => o.Household, dest => dest.MapFrom(o => o.Household.ToDto()));
+
                 });
 
         public static AccountResponse? ToDto(this Account model)

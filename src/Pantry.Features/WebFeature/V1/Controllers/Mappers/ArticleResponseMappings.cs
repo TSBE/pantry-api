@@ -14,7 +14,7 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Mappers
                 config =>
                 {
                     config.ForMember(o => o.Id, dest => dest.MapFrom(o => o.ArticleId));
-                    config.ForMember(o => o.StorageLocationId, dest => dest.MapFrom(o => o.StorageLocationId));
+                    config.ForMember(o => o.StorageLocation, dest => dest.MapFrom(o => o.StorageLocation.ToDtoNotNull()));
                     config.ForMember(o => o.GlobalTradeItemNumber, dest => dest.MapFrom(o => o.GlobalTradeItemNumber));
                     config.ForMember(o => o.Name, dest => dest.MapFrom(o => o.Name));
                     config.ForMember(o => o.BestBeforeDate, dest => dest.MapFrom(o => o.BestBeforeDate));
