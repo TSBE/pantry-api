@@ -27,6 +27,8 @@ using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
 using Pantry.Common.Time;
 using Pantry.Core.Persistence;
+using Pantry.Features.EanSearchOrg;
+using Pantry.Features.OpenFoodFacts;
 using Pantry.Features.WebFeature;
 using Pantry.Service.Infrastructure;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -130,6 +132,8 @@ public class Startup
 
         // Add core features.
         services.AddWebFeature(Configuration);
+        services.AddOpenFoodFacts(Configuration);
+        services.AddEanSearchOrg(Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env, ILogger<Startup> logger, IApiVersionDescriptionProvider provider)
