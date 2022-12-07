@@ -76,6 +76,8 @@ public static class Registrar
             .AddScopedSubscriber<ArticleListQueryHandler>()
 
             .AddScopedSubscriber<InvitationListQueryHandler>()
+
+            .AddScopedSubscriber<MetadataByGtinQueryHandler>()
             ;
     }
 }
