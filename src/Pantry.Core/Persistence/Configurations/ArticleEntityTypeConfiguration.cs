@@ -21,6 +21,7 @@ public class ArticleEntityTypeConfiguration : IEntityTypeConfiguration<Article>
         builder.Property(column => column.Content);
         builder.Property(column => column.ContentType)
             .IsRequired();
+        builder.Ignore(column => column.Metadata);
         builder.Property(column => column.HouseholdId)
             .IsRequired();
         builder.Property(column => column.StorageLocationId)
