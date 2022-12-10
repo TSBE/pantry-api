@@ -34,6 +34,13 @@ public class ArticleByIdQueryHandler
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
 
         var householdId = _principal.GetHouseholdIdOrThrow();
-        return await appDbContext.Articles.Include(i => i.StorageLocation).Include(x => x.Household).AsNoTracking().FirstOrThrowAsync(c => c.Household.HouseholdId == householdId && c.ArticleId == query.ArticleId);
+        var article = await appDbContext.Articles.Include(i => i.StorageLocation).Include(x => x.Household).AsNoTracking().FirstOrThrowAsync(c => c.Household.HouseholdId == householdId && c.ArticleId == query.ArticleId);
+
+        if (article.GlobalTradeItemNumber is not null)
+        {
+            article.Metadata = await appDbContext.Metadatas.AsNoTracking().FirstOrDefaultAsync(x => x.GlobalTradeItemNumber == article.GlobalTradeItemNumber);
+        }
+
+        return article;
     }
 }

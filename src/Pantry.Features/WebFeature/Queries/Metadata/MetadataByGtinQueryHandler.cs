@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Pantry.Common.Authentication;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.EanSearchOrg;
 using Pantry.Features.EanSearchOrg.Configuration;
 using Pantry.Features.OpenFoodFacts;
 using Pantry.Features.WebFeature.Diagnostics;
+using Refit;
 
 namespace Pantry.Features.WebFeature.Queries;
 
@@ -57,25 +57,29 @@ public class MetadataByGtinQueryHandler
             metadata = new Metadata { GlobalTradeItemNumber = query.GlobalTradeItemNumber };
             try
             {
+                _logger.ExecutingOpenFoodFacts(query.GlobalTradeItemNumber);
                 var productResponse = await _openFoodFactsApiService.GetProduct(query.GlobalTradeItemNumber);
                 if (productResponse is not null && productResponse.Status > 0)
                 {
                     metadata.FoodFacts = productResponse.Product;
                 }
             }
-            catch (System.Exception ex)
+            catch (ApiException ex)
             {
+                _logger.ExecutedOpenFoodFacts(ex.Message);
             }
 
             if (metadata.FoodFacts is null)
             {
                 try
                 {
+                    _logger.ExecutingEanSearchOrg(query.GlobalTradeItemNumber);
                     var nonFoodResponse = await _eanSearchOrgApiService.Lookup(_eanSearchOrgConfiguration.Token, query.GlobalTradeItemNumber);
                     metadata.ProductFacts = nonFoodResponse.FirstOrDefault();
                 }
-                catch (System.Exception ex)
+                catch (ApiException ex)
                 {
+                    _logger.ExecutedEanSearchOrg(ex.Message);
                 }
             }
 

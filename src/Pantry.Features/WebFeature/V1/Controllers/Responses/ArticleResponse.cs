@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 using System;
+using System.Collections.Generic;
 using Pantry.Features.WebFeature.V1.Controllers.Enums;
 
 namespace Pantry.Features.WebFeature.V1.Controllers.Responses;
@@ -48,4 +49,19 @@ public class ArticleResponse
     /// The content type of the article.
     /// </summary>
     public ContentType ContentType { get; set; }
+
+    /// <summary>
+    /// The brands.
+    /// </summary>
+    public string? Brands { get; set; }
+
+    /// <summary>
+    /// The image url.
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
+    /// <summary>
+    /// Nutriments.
+    /// </summary>
+    public IDictionary<string, NutrimentResponse>? Nutriments { get; set; }
 }

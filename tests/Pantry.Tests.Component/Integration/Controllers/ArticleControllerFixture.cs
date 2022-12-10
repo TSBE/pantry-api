@@ -218,6 +218,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         // Act
         var response = await httpClient.PutAsJsonAsync<ArticleRequest>($"api/v1/articles/{article.ArticleId}", expectedArticleRequest);
         var content = await response.Content.ReadAsStringAsync();
+
         // Assert
         response.EnsureSuccessStatusCode();
 

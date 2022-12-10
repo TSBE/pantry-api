@@ -44,6 +44,8 @@ public class Article : Auditable
     /// </summary>
     public ContentType ContentType { get; set; }
 
+    public Metadata? Metadata { get; set; }
+
     public long StorageLocationId { get; set; }
 
     public virtual StorageLocation StorageLocation { get; set; }
