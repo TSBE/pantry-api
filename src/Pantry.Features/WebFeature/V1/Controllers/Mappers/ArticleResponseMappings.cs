@@ -31,7 +31,7 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Mappers
                     o => o.ImageUrl,
                     dest => dest.MapFrom((o, d) =>
                     {
-                        return o.Metadata?.FoodFacts?.ImageUrl ?? o.Metadata?.FoodFacts?.ImageFrontUrl ?? null;
+                        return o.ImageUrl ?? o.Metadata?.FoodFacts?.ImageUrl ?? o.Metadata?.FoodFacts?.ImageFrontUrl ?? null;
                     }));
                     config.ForMember(
                     o => o.Nutriments,

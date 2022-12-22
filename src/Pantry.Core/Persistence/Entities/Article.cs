@@ -44,6 +44,13 @@ public class Article : Auditable
     /// </summary>
     public ContentType ContentType { get; set; }
 
+    /// <summary>
+    /// The image url of the article.
+    /// </summary>
+#pragma warning disable CA1056 // URI-like properties should not be strings
+    public string? ImageUrl { get; set; }
+#pragma warning restore CA1056 // URI-like properties should not be strings
+
     public Metadata? Metadata { get; set; }
 
     public long StorageLocationId { get; set; }
