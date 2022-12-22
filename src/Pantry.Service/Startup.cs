@@ -16,14 +16,12 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using Opw.HttpExceptions;
 using Opw.HttpExceptions.AspNetCore;
 using Opw.HttpExceptions.AspNetCore.Mappers;
 using Pantry.Common;
 using Pantry.Common.Authentication;
 using Pantry.Common.Diagnostics.HealthChecks;
-using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
 using Pantry.Common.Time;
 using Pantry.Core.Persistence;
@@ -37,12 +35,9 @@ namespace Pantry.Service;
 
 public class Startup
 {
-    private readonly IWebHostEnvironment _environment;
-
-    public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+    public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        _environment = environment;
     }
 
     public IConfiguration Configuration { get; }
@@ -124,12 +119,6 @@ public class Startup
         // This is just required for the HealthCheck, since it does not (yet?) work with the Factory.
         services.AddDbContext<AppDbContext>(DbContextOptions);
 
-        // Must be registered and started before any other hosted service that is using the database.
-        if (!_environment.IsIntegrationTest())
-        {
-            services.AddDatabaseMigrationHostedService<AppDbContext>();
-        }
-
         // Add core features.
         services.AddWebFeature(Configuration);
         services.AddOpenFoodFacts(Configuration);
@@ -144,6 +133,15 @@ public class Startup
         if (env.IsIntegrationTest())
         {
             app.UseDateTimeContext();
+        }
+        else
+        {
+            // migrate any database changes on startup (includes initial db creation)
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+            }
         }
 
         // Required. Writes common Runtime and Environment Info to the log.

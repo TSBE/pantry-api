@@ -4,10 +4,7 @@ namespace Pantry.Common.Authentication;
 
 internal static class CertificatesHelper
 {
-    public static IEnumerable<X509Certificate2> GetCertificates(IEnumerable<JwtTokenSettings> tokensSettings) =>
-        tokensSettings.SelectMany(GetCertificates);
-
-    private static IEnumerable<X509Certificate2> GetCertificates(JwtTokenSettings settings)
+    public static IEnumerable<X509Certificate2> GetCertificates(JwtTokenSettings settings)
     {
         foreach (var certificate in GetCertificatesCollection(settings))
         {

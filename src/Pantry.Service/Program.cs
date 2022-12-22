@@ -33,14 +33,7 @@ public static class Program
                 (hostingContext, logging) =>
                 {
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        logging.AddConsole();
-                    }
-                    else
-                    {
-                        logging.AddPantryConsole();
-                    }
+                    logging.AddConsole();
 
                     logging.Configure(
                         options =>
