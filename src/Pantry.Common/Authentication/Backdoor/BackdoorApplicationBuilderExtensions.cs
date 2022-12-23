@@ -22,9 +22,6 @@ public static class BackdoorApplicationBuilderExtensions
     ///     The default user id to be used as value for both the name and name identifier claims (unless
     ///     otherwise set by the claims provider delegate).
     /// </param>
-    /// <param name="scopes">
-    ///     The scopes to be added to the fake token. If null or empty a default scope will be issued.
-    /// </param>
     /// <param name="claimsProvider">
     ///     A delegate that receives the user id and returns a collection of additional claims to be added to
     ///     the identity.
@@ -33,41 +30,17 @@ public static class BackdoorApplicationBuilderExtensions
     public static IApplicationBuilder UseBackdoorAuthentication(
         this IApplicationBuilder builder,
         string defaultUserId,
-        string? scopes = null,
         Func<string, IEnumerable<Claim>>? claimsProvider = null)
     {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
         var settings = new BackdoorSettings
         {
             DefaultUserId = defaultUserId,
-            Scopes = scopes,
             ClaimsProvider = claimsProvider
         };
 
-        return UseBackdoorAuthentication(builder, settings);
-    }
-
-    /// <summary>
-    ///     <para>
-    ///         Enables the authentication backdoor. This middleware should be registered after the actual authentication (
-    ///         <c>UseAuthentication</c>) and the authorization (<c>UseAuthorization</c>) middleware.
-    ///     </para>
-    ///     <para>
-    ///         Intended for usage in test environments only.
-    ///     </para>
-    /// </summary>
-    /// <param name="builder">The <see cref="IApplicationBuilder" /> to add the middleware to.</param>
-    /// <param name="settings">The settings such as the default user id.</param>
-    /// <returns>The <see cref="IApplicationBuilder" /> so that additional calls can be chained.</returns>
-    public static IApplicationBuilder UseBackdoorAuthentication(
-        this IApplicationBuilder builder,
-        BackdoorSettings? settings = null)
-    {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        builder.UseMiddleware<BackdoorAuthenticationMiddleware>(settings ?? new BackdoorSettings());
+        builder.UseMiddleware<BackdoorAuthenticationMiddleware>(settings);
 
         return builder;
     }

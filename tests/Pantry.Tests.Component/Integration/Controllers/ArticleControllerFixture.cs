@@ -26,7 +26,7 @@ public class ArticleControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetArticleListAsync_ShouldReturnDevice()
+    public async Task GetArticleListAsync_ShouldReturnArticles()
     {
         // Arrange
         var article1 = new Article
@@ -75,7 +75,7 @@ public class ArticleControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetArticleByIdAsync_ShouldReturnDevice()
+    public async Task GetArticleByIdAsync_ShouldReturnArticle()
     {
         // Arrange
         var article1 = new Article

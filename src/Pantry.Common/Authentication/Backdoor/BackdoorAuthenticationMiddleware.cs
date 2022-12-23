@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -13,13 +12,9 @@ public class BackdoorAuthenticationMiddleware
 {
     private const string UserIdHeaderName = "x-user-id";
 
-    private const string ScopesHeaderName = "x-scopes";
-
     private readonly ILogger<BackdoorAuthenticationMiddleware> _logger;
 
     private readonly RequestDelegate _next;
-
-    private readonly string _scopes;
 
     private readonly BackdoorSettings _settings;
 
@@ -43,15 +38,7 @@ public class BackdoorAuthenticationMiddleware
         _next = next;
         _settings = settings;
         _logger = logger;
-
-        _scopes = string.IsNullOrEmpty(settings.Scopes) ? DefaultScope : settings.Scopes;
     }
-
-    /// <summary>
-    ///     Gets the name of the default scope.
-    /// </summary>
-    public static string DefaultScope { get; } =
-        $"backdoor-scope-{Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture)}";
 
     /// <summary>
     ///     Called to execute the middleware.
@@ -83,16 +70,20 @@ public class BackdoorAuthenticationMiddleware
 
     private ClaimsPrincipal? GetBackdoorUserPrincipal(HttpContext context)
     {
-        string? userId = context.Request.Headers[UserIdHeaderName].FirstOrDefault();
-
-        if (string.IsNullOrEmpty(userId))
-        {
-            userId = _settings.DefaultUserId;
-        }
-        else if (userId == "anonymous")
+        var userId = context.Request.Headers[UserIdHeaderName].FirstOrDefault() ?? _settings.DefaultUserId;
+        if (userId == "anonymous")
         {
             return null;
         }
+
+        List<Claim> claims = GetClaimsByUserId(userId);
+
+        return new ClaimsPrincipal(new ClaimsIdentity(claims, "backdoor"));
+    }
+
+    private List<Claim> GetClaimsByUserId(string userId)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userId, nameof(userId));
 
         List<Claim> claims = _settings.ClaimsProvider?.Invoke(userId).ToList() ?? new List<Claim>(3);
 
@@ -102,10 +93,6 @@ public class BackdoorAuthenticationMiddleware
             claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
         }
 
-        string scopes = context.Request.Headers[ScopesHeaderName].FirstOrDefault() ?? _scopes;
-
-        claims.Add(new Claim("scope", scopes));
-
-        return new ClaimsPrincipal(new ClaimsIdentity(claims, "backdoor"));
+        return claims;
     }
 }

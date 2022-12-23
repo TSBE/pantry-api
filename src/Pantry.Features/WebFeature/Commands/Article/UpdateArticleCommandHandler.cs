@@ -6,7 +6,6 @@ using Pantry.Common.Authentication;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Diagnostics;
-using Pantry.Features.WebFeature.V1.Controllers.Requests;
 
 namespace Pantry.Features.WebFeature.Commands;
 
@@ -36,6 +35,7 @@ public class UpdateArticleCommandHandler
         var householdId = _principal.GetHouseholdIdOrThrow();
         var article = await appDbContext.Articles.Include(x => x.Household).FirstOrThrowAsync(c => c.Household.HouseholdId == householdId && c.ArticleId == command.ArticleId);
         var storageLocation = await appDbContext.StorageLocations.Include(i => i.Household).FirstOrThrowAsync(c => c.HouseholdId == householdId && c.StorageLocationId == command.StorageLocationId);
+        var metadata = await appDbContext.Metadatas.FirstOrDefaultAsync(x => x.GlobalTradeItemNumber == command.GlobalTradeItemNumber);
 
         article.StorageLocation = storageLocation;
         article.GlobalTradeItemNumber = command.GlobalTradeItemNumber;
@@ -44,6 +44,7 @@ public class UpdateArticleCommandHandler
         article.Quantity = command.Quantity;
         article.Content = command.Content;
         article.ContentType = command.ContentType;
+        article.ImageUrl = metadata?.FoodFacts?.ImageUrl ?? metadata?.FoodFacts?.ImageFrontUrl ?? null;
 
         await appDbContext.SaveChangesAsync();
 

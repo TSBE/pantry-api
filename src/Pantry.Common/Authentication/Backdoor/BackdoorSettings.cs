@@ -14,12 +14,6 @@ public class BackdoorSettings
     public string DefaultUserId { get; set; } = "test-user";
 
     /// <summary>
-    ///     Gets or sets the scopes to be added to the fake token. Multiple scopes can be provided as a
-    ///     comma-separated list. If null or empty a default scope will be issued.
-    /// </summary>
-    public string? Scopes { get; set; }
-
-    /// <summary>
     ///     Gets or sets an optional delegate that receives the user id and returns a collection of claims to be
     ///     added to the fake identity.
     /// </summary>

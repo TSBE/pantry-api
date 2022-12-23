@@ -35,6 +35,7 @@ public class CreateArticleCommandHandler
         var householdId = _principal.GetHouseholdIdOrThrow();
         var household = await appDbContext.Households.FirstOrThrowAsync(c => c.HouseholdId == householdId);
         var storageLocation = await appDbContext.StorageLocations.Include(i => i.Household).FirstOrThrowAsync(c => c.HouseholdId == householdId && c.StorageLocationId == command.StorageLocationId);
+        var metadata = await appDbContext.Metadatas.FirstOrDefaultAsync(x => x.GlobalTradeItemNumber == command.GlobalTradeItemNumber);
 
         var article = new Article
         {
@@ -45,8 +46,13 @@ public class CreateArticleCommandHandler
             BestBeforeDate = command.BestBeforeDate,
             Quantity = command.Quantity,
             Content = command.Content,
-            ContentType = command.ContentType
+            ContentType = command.ContentType,
         };
+
+        if (metadata is not null)
+        {
+            article.ImageUrl = metadata.FoodFacts?.ImageUrl ?? metadata.FoodFacts?.ImageFrontUrl ?? null;
+        }
 
         appDbContext.Articles.Add(article);
         await appDbContext.SaveChangesAsync();

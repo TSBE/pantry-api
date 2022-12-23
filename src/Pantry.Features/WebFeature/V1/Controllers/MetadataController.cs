@@ -12,14 +12,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class MetadataController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
-
     private readonly IQueryPublisher _queryPublisher;
 
-    public MetadataController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public MetadataController(IQueryPublisher queryPublisher)
     {
         _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
     }
 
     /// <summary>

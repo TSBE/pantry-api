@@ -23,7 +23,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetStorageLocationListAsync_ShouldReturnDevice()
+    public async Task GetStorageLocationListAsync_ShouldReturnStorageLocations()
     {
         // Arrange
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
@@ -49,7 +49,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
     }
 
     [Fact]
-    public async Task GetStorageLocationByIdAsync_ShouldReturnDevice()
+    public async Task GetStorageLocationByIdAsync_ShouldReturnStorageLocation()
     {
         // Arrange
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
