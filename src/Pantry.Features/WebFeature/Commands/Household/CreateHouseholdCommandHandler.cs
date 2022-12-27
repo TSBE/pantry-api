@@ -42,6 +42,7 @@ public class CreateHouseholdCommandHandler
             {
                 Name = command.Name,
                 SubscriptionType = command.SubscriptionType,
+                OwnerId = account.AccountId
             };
             account.Household = household;
             appDbContext.Households.Add(household);
