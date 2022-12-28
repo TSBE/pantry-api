@@ -48,42 +48,4 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-
-    /// <summary>
-    /// Override the existing <see cref="DbContext"/> registration with one that
-    /// uses a SQLite database.
-    /// </summary>
-    /// <typeparam name="TDbContext">The type of DbContext to override.</typeparam>
-    /// <typeparam name="TImplementationContext">The type of the DbContext to use.</typeparam>
-    /// <param name="services">A service collection.</param>
-    /// <param name="connectionString">The SQLite connection string to use.</param>
-    /// <param name="loggerFactory">An optional <see cref="ILoggerFactory"/> to use.</param>
-    /// <param name="optionsAction">An optional <see cref="Action"/> to further configure the <see cref="DbContextOptions{TContext}"/>.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection OverrideWithInMemorySqliteDatabase<TDbContext, TImplementationContext>(
-        this IServiceCollection services,
-        string connectionString,
-        ILoggerFactory? loggerFactory = null,
-        Action<DbContextOptionsBuilder>? optionsAction = null)
-        where TDbContext : DbContext
-        where TImplementationContext : TDbContext
-    {
-        services.RemoveAll<TDbContext>();
-
-        services.AddDbContextPool<TDbContext, TImplementationContext>((serviceProvider, optionsBuilder) =>
-        {
-            optionsBuilder.UseSqlite(connectionString)
-                .EnableDetailedErrors();
-
-            if (loggerFactory != null)
-            {
-                optionsBuilder.UseLoggerFactory(loggerFactory)
-                    .EnableSensitiveDataLogging();
-            }
-
-            optionsAction?.Invoke(optionsBuilder);
-        });
-
-        return services;
-    }
 }

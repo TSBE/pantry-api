@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pantry.Features.WebFeature.Authentication;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Configuration;
 using Pantry.Features.WebFeature.Queries;
@@ -30,18 +32,52 @@ public static class Registrar
         }).AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssembly(typeof(Registrar).Assembly, ServiceLifetime.Scoped);
         services.Configure<WebFeatureConfiguration>(configuration.GetRequiredSection(WebFeatureConfiguration.Name));
+        services.AddTransient<IClaimsTransformation, HouseholdClaimsTransformation>();
 
         ISilverbackBuilder silverbackBuilder = services.ConfigureSilverback();
 
         // CommandHandlers
         silverbackBuilder
+            .AddScopedSubscriber<CreateAccountCommandHandler>()
+            .AddScopedSubscriber<DeleteAccountCommandHandler>()
+
             .AddScopedSubscriber<CreateDeviceCommandHandler>()
+            .AddScopedSubscriber<UpdateDeviceCommandHandler>()
+            .AddScopedSubscriber<DeleteDeviceCommandHandler>()
+
+            .AddScopedSubscriber<CreateHouseholdCommandHandler>()
+
+            .AddScopedSubscriber<CreateStorageLocationCommandHandler>()
+            .AddScopedSubscriber<UpdateStorageLocationCommandHandler>()
+            .AddScopedSubscriber<DeleteStorageLocationCommandHandler>()
+
+            .AddScopedSubscriber<CreateArticleCommandHandler>()
+            .AddScopedSubscriber<UpdateArticleCommandHandler>()
+            .AddScopedSubscriber<DeleteArticleCommandHandler>()
+
+            .AddScopedSubscriber<CreateInvitationCommandHandler>()
+            .AddScopedSubscriber<AcceptInvitationCommandHandler>()
+            .AddScopedSubscriber<DeclineInvitationCommandHandler>()
             ;
 
         // QueryHandlers
         silverbackBuilder
+            .AddScopedSubscriber<AccountQueryHandler>()
+
             .AddScopedSubscriber<DeviceByIdQueryHandler>()
             .AddScopedSubscriber<DeviceListQueryHandler>()
+
+            .AddScopedSubscriber<HouseholdQueryHandler>()
+
+            .AddScopedSubscriber<StorageLocationByIdQueryHandler>()
+            .AddScopedSubscriber<StorageLocationListQueryHandler>()
+
+            .AddScopedSubscriber<ArticleByIdQueryHandler>()
+            .AddScopedSubscriber<ArticleListQueryHandler>()
+
+            .AddScopedSubscriber<InvitationListQueryHandler>()
+
+            .AddScopedSubscriber<MetadataByGtinQueryHandler>()
             ;
     }
 }

@@ -6,11 +6,6 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Responses;
 public class DeviceResponse
 {
     /// <summary>
-    /// Represents the database internal id.
-    /// </summary>
-    public long DeviceId { get; set; }
-
-    /// <summary>
     /// A device name.
     /// </summary>
     public string? Name { get; set; }

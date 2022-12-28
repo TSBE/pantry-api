@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Principal;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Pantry.Common.Authentication;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Diagnostics;
@@ -13,10 +15,16 @@ public class DeviceByIdQueryHandler
 
     private readonly ILogger<DeviceByIdQueryHandler> _logger;
 
-    public DeviceByIdQueryHandler(ILogger<DeviceByIdQueryHandler> logger, IDbContextFactory<AppDbContext> dbContextFactory)
+    private readonly IPrincipal _principal;
+
+    public DeviceByIdQueryHandler(
+        ILogger<DeviceByIdQueryHandler> logger,
+        IDbContextFactory<AppDbContext> dbContextFactory,
+        IPrincipal principal)
     {
         _logger = logger;
         _dbContextFactory = dbContextFactory;
+        _principal = principal;
     }
 
     public async Task<Device> ExecuteAsync(DeviceByIdQuery query)
@@ -24,7 +32,8 @@ public class DeviceByIdQueryHandler
         _logger.ExecutingQuery(nameof(DeviceByIdQuery));
 
         using AppDbContext appDbContext = _dbContextFactory.CreateDbContext();
-        return await appDbContext.Devices
-            .AsNoTracking().FirstOrThrowAsync(c => c.DeviceId == query.DeviceId);
+
+        var auth0Id = _principal.GetAuth0IdOrThrow();
+        return await appDbContext.Devices.Include(x => x.Account).AsNoTracking().FirstOrThrowAsync(c => c.Account.OAuhtId == auth0Id && c.InstallationId == query.InstallationId);
     }
 }

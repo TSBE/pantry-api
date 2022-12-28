@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Pantry.Core.Persistence;
+using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Tests.EntityFrameworkCore.Extensions;
 using Pantry.Tests.EntityFrameworkCore.Persistence;
@@ -19,16 +20,26 @@ public class CreateDeviceCommandHandlerFixture : BaseFixture
     {
         // Arrange
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
-        testDatabase.SetupDatabase();
-
+        testDatabase.SetupDatabase(
+            dbContext =>
+            {
+                dbContext.Accounts.Add(AccountJohnDoe);
+            });
         var commandHandler = new CreateDeviceCommandHandler(
             Substitute.For<ILogger<CreateDeviceCommandHandler>>(),
-            testDatabase);
+            testDatabase,
+            PrincipalOfJohnDoe);
+
+        var installationId = Guid.NewGuid();
 
         // Act
-        var act = await commandHandler.ExecuteAsync(new CreateDeviceCommand(null, Guid.NewGuid(), "iPhone 14", "Foo`s iPhone", Core.Persistence.Enums.DevicePlatformType.IOS));
+        var act = await commandHandler.ExecuteAsync(new CreateDeviceCommand(installationId, "iPhone 14", "Foo`s iPhone", Core.Persistence.Enums.DevicePlatformType.IOS, null));
 
         // Assert
+        act.InstallationId.Should().Be(installationId);
+        act.Model.Should().BeEquivalentTo("iPhone 14");
         act.Name.Should().BeEquivalentTo("Foo`s iPhone");
+        act.Platform.Should().Be(Core.Persistence.Enums.DevicePlatformType.IOS);
+        act.DeviceToken.Should().BeNull();
     }
 }

@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +19,14 @@ using Microsoft.Extensions.Options;
 using Opw.HttpExceptions;
 using Opw.HttpExceptions.AspNetCore;
 using Opw.HttpExceptions.AspNetCore.Mappers;
+using Pantry.Common;
+using Pantry.Common.Authentication;
 using Pantry.Common.Diagnostics.HealthChecks;
-using Pantry.Common.EntityFrameworkCore.Migrations;
 using Pantry.Common.Hosting;
+using Pantry.Common.Time;
 using Pantry.Core.Persistence;
+using Pantry.Features.EanSearchOrg;
+using Pantry.Features.OpenFoodFacts;
 using Pantry.Features.WebFeature;
 using Pantry.Service.Infrastructure;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -27,12 +35,9 @@ namespace Pantry.Service;
 
 public class Startup
 {
-    private readonly IWebHostEnvironment _environment;
-
-    public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+    public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        _environment = environment;
     }
 
     public IConfiguration Configuration { get; }
@@ -82,7 +87,7 @@ public class Startup
             o.IsExceptionResponse = context => (context.Response.StatusCode >= 400 && context.Response.StatusCode < 600);
 
             // Only log the when it has a status code of 500 or higher, or when it not is a HttpException.
-            o.ShouldLogException = exception => (exception is HttpExceptionBase httpException && (int)httpException.StatusCode >= 500) || !(exception is HttpExceptionBase);
+            o.ShouldLogException = exception => (exception is HttpExceptionBase httpException && (int)httpException.StatusCode >= 500) || exception is not HttpExceptionBase;
 
             // default exception mapper for mapping to Problem Details
             o.ExceptionMapper<Exception, ProblemDetailsExceptionMapper<Exception>>();
@@ -97,30 +102,47 @@ public class Startup
         });
         services.AddSwaggerGen();
 
+        // Configures the most standard JWT authentication
+        services.AddJwtAuthentication(Configuration);
+
+        services.AddTransient<IPrincipal>(provider =>
+        provider.GetService<IHttpContextAccessor>()?.HttpContext?.User
+        ?? new GenericPrincipal(new GenericIdentity("nocontext"), new string[1]));
+
         var connectionString = Configuration.GetConnectionString("AppDatabase");
-        Action<IServiceProvider, DbContextOptionsBuilder> dbContextOptions = (_, builder) =>
+        void DbContextOptions(IServiceProvider serviceProvider, DbContextOptionsBuilder builder) =>
             builder.UseNpgsql(connectionString, options => options.CommandTimeout(15))
             .UseSnakeCaseNamingConvention();
 
-        services.AddPooledDbContextFactory<AppDbContext>(dbContextOptions);
+        services.AddPooledDbContextFactory<AppDbContext>(DbContextOptions);
 
         // This is just required for the HealthCheck, since it does not (yet?) work with the Factory.
-        services.AddDbContext<AppDbContext>(dbContextOptions);
-
-        // Must be registered and started before any other hosted service that is using the database.
-        if (!_environment.IsIntegrationTest())
-        {
-            services.AddDatabaseMigrationHostedService<AppDbContext>();
-        }
+        services.AddDbContext<AppDbContext>(DbContextOptions);
 
         // Add core features.
         services.AddWebFeature(Configuration);
+        services.AddOpenFoodFacts(Configuration);
+        services.AddEanSearchOrg(Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env, ILogger<Startup> logger, IApiVersionDescriptionProvider provider)
     {
         // this is the first middleware component added to the pipeline
         app.UseHttpExceptions();
+
+        if (env.IsIntegrationTest())
+        {
+            app.UseDateTimeContext();
+        }
+        else
+        {
+            // migrate any database changes on startup (includes initial db creation)
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+            }
+        }
 
         // Required. Writes common Runtime and Environment Info to the log.
         logger.LogRuntimeAndEnvironmentInformation();
@@ -134,6 +156,9 @@ public class Startup
             // Use only when Opw.HttpExceptions is hiding the exception
             // app.UseDeveloperExceptionPage();
         }
+
+        // Required. Used for authentication.
+        app.UseAuthentication();
 
         // Allow Swagger ui for anonymous.
         app.UseStaticFiles();
@@ -156,6 +181,13 @@ public class Startup
 
         if (env.IsDevelopment() || env.IsIntegrationTest())
         {
+            // Enable for sensitive data logging.
+            // IdentityModelEventSource.ShowPII = true;
+
+            // Add the backdoor middleware in between the Authentication and Authorization ones
+            app.UseBackdoorAuthentication(
+                "auth0|backdoor1234567890",
+                claimsProvider: userId => { return new List<Claim> { new Claim(CustomClaimTypes.HOUSEHOLDID, "1") }; });
         }
 
         app.UseAuthorization();

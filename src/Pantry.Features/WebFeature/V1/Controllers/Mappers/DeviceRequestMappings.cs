@@ -10,7 +10,6 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Mappers
             new(
                 config =>
                 {
-                    config.ForMember(o => o.DeviceId, dest => dest.MapFrom(o => o.DeviceId));
                     config.ForMember(o => o.DeviceToken, dest => dest.MapFrom(o => o.DeviceToken));
                     config.ForMember(o => o.InstallationId, dest => dest.MapFrom(o => o.InstallationId));
                     config.ForMember(o => o.Model, dest => dest.MapFrom(o => o.Model));

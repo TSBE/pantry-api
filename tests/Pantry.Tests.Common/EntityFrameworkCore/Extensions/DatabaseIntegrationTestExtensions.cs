@@ -45,40 +45,6 @@ public static class DatabaseIntegrationTestExtensions
     }
 
     /// <summary>
-    ///     Replaces any Database already configure with a shared in-memory sqlite database.
-    /// </summary>
-    /// <typeparam name="TContext">The DbContext Type to be replaced.</typeparam>
-    /// <typeparam name="TFactory">A custom factory for the creation of the context.</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection" /> to operate on.</param>
-    /// <param name="configurationAction">An optional action that allows for additional configuration of the <see cref="DbContextOptionsBuilder"/>.</param>
-    /// <returns>The <see cref="IServiceCollection" /> to chain calls.</returns>
-    public static IServiceCollection OverrideWithSharedInMemorySqliteDatabase<TContext, TFactory>(this IServiceCollection services, Action<DbContextOptionsBuilder>? configurationAction = null)
-        where TContext : DbContext
-        where TFactory : IDbContextFactory<TContext>
-    {
-        services.RemoveAll<DbContextOptions<TContext>>();
-        services.RemoveAll<TContext>();
-
-        services.AddSingleton<SharedInmemorySqliteDatabaseProvider<TContext>>();
-        services.AddDbContextFactory<TContext, TFactory>(OptionBuilder);
-
-        // This is just required for the HealthCheck, since it does not (yet?) work with the Factory.
-        services.AddDbContextPool<TContext>(OptionBuilder);
-
-        void OptionBuilder(IServiceProvider serviceProvider, DbContextOptionsBuilder options)
-        {
-            SharedInmemorySqliteDatabaseProvider<TContext> sqliteDatabaseProvider = serviceProvider.GetRequiredService<SharedInmemorySqliteDatabaseProvider<TContext>>();
-
-            options = options.UseSqlite(sqliteDatabaseProvider.ConnectionString)
-                .EnableDetailedErrors();
-
-            configurationAction?.Invoke(options);
-        }
-
-        return services;
-    }
-
-    /// <summary>
     ///     Ensures that the Database is created and optionally executes some initialization.
     /// </summary>
     /// <typeparam name="TContext">The DbContext Type to set up.</typeparam>
@@ -91,15 +57,13 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            await appDbContext.Database.EnsureCreatedAsync();
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        await appDbContext.Database.EnsureCreatedAsync();
 
-            if (setupAction != null)
-            {
-                setupAction(appDbContext);
-                await appDbContext.SaveChangesAsync();
-            }
+        if (setupAction != null)
+        {
+            setupAction(appDbContext);
+            await appDbContext.SaveChangesAsync();
         }
     }
 
@@ -115,15 +79,13 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            appDbContext.Database.EnsureCreated();
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        appDbContext.Database.EnsureCreated();
 
-            if (setupAction != null)
-            {
-                setupAction(appDbContext);
-                appDbContext.SaveChanges();
-            }
+        if (setupAction != null)
+        {
+            setupAction(appDbContext);
+            appDbContext.SaveChanges();
         }
     }
 
@@ -139,9 +101,7 @@ public static class DatabaseIntegrationTestExtensions
         using IServiceScope scope = app.Services.CreateScope();
 
         IDbContextFactory<TContext> dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<TContext>>();
-        using (TContext appDbContext = dbContextFactory.CreateDbContext())
-        {
-            assertAction(appDbContext);
-        }
+        using TContext appDbContext = dbContextFactory.CreateDbContext();
+        assertAction(appDbContext);
     }
 }

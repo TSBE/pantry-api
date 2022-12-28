@@ -12,8 +12,9 @@ public static class Program
     [ExcludeFromCodeCoverage(Justification = "Not testable.")]
     public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-    [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Necessary for the integration tests.")]
+#pragma warning disable IDE0060 // Remove unused parameter
     public static IHostBuilder CreateHostBuilder(string[] args)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
         return new HostBuilder()
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -32,14 +33,7 @@ public static class Program
                 (hostingContext, logging) =>
                 {
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        logging.AddConsole();
-                    }
-                    else
-                    {
-                        logging.AddPantryConsole();
-                    }
+                    logging.AddConsole();
 
                     logging.Configure(
                         options =>

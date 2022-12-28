@@ -1,10 +1,9 @@
 name: continuous
 on:
   push:
-    branches:
-      - '**'
+    branches: [main, develop]
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -16,7 +15,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Restore
         run: dotnet restore
       - name: Build
@@ -30,7 +29,7 @@ jobs:
         if: success() || failure()
         with:
           name: .NET Tests
-          path: '**/*.trx'
+          path: "**/*.trx"
           reporter: dotnet-trx
   publish:
     name: publish
@@ -43,7 +42,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Restore
         run: dotnet restore --runtime linux-musl-x64
       - name: Build
