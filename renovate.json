@@ -14,6 +14,13 @@
       ],
       "groupName": "Silverback",
       "groupSlug": "silverback"
+    },
+    {
+      "matchPackagePrefixes": [
+        "Microsoft.CodeAnalysis."
+      ],
+      "groupName": "Microsoft.CodeAnalysis",
+      "groupSlug": "microsoft-codeanalysis"
     }
   ],
   "ignorePaths": []
