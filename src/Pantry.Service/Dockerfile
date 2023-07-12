@@ -1,4 +1,4 @@
-FROM jelastic/dotnet:7.0.102 AS base
+FROM jelastic/dotnet:7.0.306 AS base
 WORKDIR /home/jelastic/APP/ROOT
 EXPOSE 22 80
 
