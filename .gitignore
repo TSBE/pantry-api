@@ -263,3 +263,4 @@ __pycache__/
 # Test coverage reports
 **/coveragereport/
 **/coverage.opencover.xml
+.DS_Store
