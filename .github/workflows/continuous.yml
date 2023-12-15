@@ -50,7 +50,7 @@ jobs:
       - name: Publish
         run: dotnet publish ./src/Pantry.Service/Pantry.Service.csproj --configuration Release -o app/publish --no-restore --runtime linux-musl-x64 --no-self-contained
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: published-app
           path: app/publish/
