@@ -14,7 +14,7 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
       <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-      <PackageReference Include="xunit" Version="2.6.3" />
+      <PackageReference Include="xunit" Version="2.6.4" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
       <PackageReference Include="System.Text.Json" Version="8.0.0" />
       <PackageReference Include="xunit.abstractions" Version="2.0.3" />
