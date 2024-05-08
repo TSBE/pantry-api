@@ -25,7 +25,7 @@ jobs:
       - name: Run integration tests
         run: dotnet test ./tests/Pantry.Tests.Component/Pantry.Tests.Component.csproj --configuration Release --no-build --verbosity normal --logger trx --filter "Category=Integration"
       - name: Publish tests report
-        uses: dorny/test-reporter@v1.9.0
+        uses: dorny/test-reporter@v1.9.1
         if: success() || failure()
         with:
           name: .NET Tests
