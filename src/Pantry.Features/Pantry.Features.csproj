@@ -19,8 +19,8 @@
       <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-      <PackageReference Include="Silverback.Integration" Version="4.4.1" />
-      <PackageReference Include="Silverback.Core" Version="4.4.1" />
+      <PackageReference Include="Silverback.Integration" Version="4.5.0" />
+      <PackageReference Include="Silverback.Core" Version="4.5.0" />
    </ItemGroup>
 
    <ItemGroup>
