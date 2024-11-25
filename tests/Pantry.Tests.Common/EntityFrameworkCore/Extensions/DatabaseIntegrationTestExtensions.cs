@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pantry.Tests.Common;
@@ -23,6 +24,7 @@ public static class DatabaseIntegrationTestExtensions
     {
         services.RemoveAll<DbContextOptions<TContext>>();
         services.RemoveAll<TContext>();
+        services.RemoveAll<IDbContextOptionsConfiguration<TContext>>();
 
         services.AddSingleton<SharedInmemorySqliteDatabaseProvider<TContext>>();
 
