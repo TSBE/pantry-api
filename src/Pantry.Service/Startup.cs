@@ -45,7 +45,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddPantryHealthChecks()
-            .AddDbContextCheck<AppDbContext>(tags: new[] { HealthCheckConstants.Tags.ReadinessTag });
+            .AddDbContextCheck<AppDbContext>(tags: [HealthCheckConstants.Tags.ReadinessTag]);
 
         services.Configure<HealthCheckPublisherOptions>(
             options =>
@@ -117,7 +117,7 @@ public class Startup
         services.AddPooledDbContextFactory<AppDbContext>(DbContextOptions);
 
         // This is just required for the HealthCheck, since it does not (yet?) work with the Factory.
-        services.AddDbContext<AppDbContext>(DbContextOptions);
+        services.AddDbContextPool<AppDbContext>(DbContextOptions);
 
         // Add core features.
         services.AddWebFeature(Configuration);
