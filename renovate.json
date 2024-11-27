@@ -1,10 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)",
-    ":autodetectPinVersions",
     ":prHourlyLimit4",
     ":prConcurrentLimit20",
     ":preserveSemverRanges"
@@ -17,18 +16,18 @@
   ],
   "packageRules": [
     {
-      "matchPackagePrefixes": [
-        "Silverback."
-      ],
       "groupName": "Silverback",
-      "groupSlug": "silverback"
+      "groupSlug": "silverback",
+      "matchPackageNames": [
+        "Silverback.{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": [
-        "Microsoft.CodeAnalysis."
-      ],
       "groupName": "Microsoft.CodeAnalysis",
-      "groupSlug": "microsoft-codeanalysis"
+      "groupSlug": "microsoft-codeanalysis",
+      "matchPackageNames": [
+        "Microsoft.CodeAnalysis.{/,}**"
+      ]
     }
   ],
   "ignorePaths": []
