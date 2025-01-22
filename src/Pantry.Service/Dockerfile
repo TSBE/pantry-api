@@ -1,4 +1,4 @@
-FROM jelastic/dotnet:8.0.404-almalinux-9 AS base
+FROM jelastic/dotnet:8.0.405-almalinux-9 AS base
 WORKDIR /home/jelastic/APP/ROOT
 EXPOSE 22 80
 
