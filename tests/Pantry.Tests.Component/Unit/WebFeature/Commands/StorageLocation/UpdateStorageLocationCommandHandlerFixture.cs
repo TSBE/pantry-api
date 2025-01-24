@@ -1,16 +1,8 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -39,9 +31,9 @@ public class UpdateStorageLocationCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new UpdateStorageLocationCommand(storageLocation.StorageLocationId, "Updated Location", "Updated Description"));
 
         // Assert
-        act.Name.Should().Be("Updated Location");
-        act.Description.Should().Be("Updated Description");
-        act.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+        act.Name.ShouldBe("Updated Location");
+        act.Description.ShouldBe("Updated Description");
+        act.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
     }
 
     [Fact]
@@ -68,6 +60,6 @@ public class UpdateStorageLocationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new UpdateStorageLocationCommand(storageLocation.StorageLocationId, "Updated Location", "Updated Description"));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

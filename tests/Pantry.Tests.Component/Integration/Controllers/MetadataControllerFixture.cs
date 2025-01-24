@@ -1,14 +1,6 @@
-﻿using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Pantry.Core.Persistence;
+﻿using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
-using Pantry.Tests.Component.Integration.Environment;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Controllers;
 
@@ -26,7 +18,7 @@ public class MetadataControllerFixture : BaseControllerFixture
         // Arrange
         var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", FoodFacts = new Core.Models.OpenFoodFacts.Product { ProductName = "Unittest" } };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -40,8 +32,8 @@ public class MetadataControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions);
 
         // Assert
-        response!.Name.Should().Be(metadata.FoodFacts.ProductName);
-        response!.GlobalTradeItemNumber.Should().Be(metadata.GlobalTradeItemNumber);
+        response!.Name.ShouldBe(metadata.FoodFacts.ProductName);
+        response!.GlobalTradeItemNumber.ShouldBe(metadata.GlobalTradeItemNumber);
     }
 
     [Fact]
@@ -50,7 +42,7 @@ public class MetadataControllerFixture : BaseControllerFixture
         // Arrange
         var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", ProductFacts = new Core.Models.EanSearchOrg.NonFoodProduct { Name = "Unittest" } };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -64,7 +56,7 @@ public class MetadataControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions);
 
         // Assert
-        response!.Name.Should().Be(metadata.ProductFacts.Name);
-        response!.GlobalTradeItemNumber.Should().Be(metadata.GlobalTradeItemNumber);
+        response!.Name.ShouldBe(metadata.ProductFacts.Name);
+        response!.GlobalTradeItemNumber.ShouldBe(metadata.GlobalTradeItemNumber);
     }
 }

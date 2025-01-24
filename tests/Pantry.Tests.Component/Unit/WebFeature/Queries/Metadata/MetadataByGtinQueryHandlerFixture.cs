@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Pantry.Core.Models.EanSearchOrg;
 using Pantry.Core.Models.OpenFoodFacts;
 using Pantry.Core.Persistence;
@@ -13,9 +10,6 @@ using Pantry.Features.EanSearchOrg.Configuration;
 using Pantry.Features.OpenFoodFacts;
 using Pantry.Features.OpenFoodFacts.Responses;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -26,7 +20,7 @@ public class MetadataByGtinQueryHandlerFixture : BaseFixture
     public async Task ExecuteAsync_ShouldReturn()
     {
         // Arrange
-        var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", FoodFacts = new Core.Models.OpenFoodFacts.Product { Brands = "Unittest" } };
+        var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", FoodFacts = new Product { Brands = "Unittest" } };
         using SqliteInMemoryDbContextFactory<AppDbContext> testDatabase = new();
         testDatabase.SetupDatabase(
         dbContext =>
@@ -42,7 +36,7 @@ public class MetadataByGtinQueryHandlerFixture : BaseFixture
         Metadata actual = await queryHandler.ExecuteAsync(new MetadataByGtinQuery(metadata.GlobalTradeItemNumber));
 
         // Assert
-        actual.FoodFacts?.Brands.Should().Be(metadata.FoodFacts.Brands);
+        actual.FoodFacts?.Brands.ShouldBe(metadata.FoodFacts.Brands);
         await openFoodFactsApiService.DidNotReceive().GetProduct(Arg.Any<string>());
         await eanSearchOrgApiService.DidNotReceive().Lookup(Arg.Any<string>(), Arg.Any<string>());
     }
@@ -75,7 +69,7 @@ public class MetadataByGtinQueryHandlerFixture : BaseFixture
         Metadata actual = await queryHandler.ExecuteAsync(new MetadataByGtinQuery("GTIN"));
 
         // Assert
-        actual.FoodFacts?.Brands.Should().Be(product.Product.Brands);
+        actual.FoodFacts?.Brands.ShouldBe(product.Product.Brands);
         await openFoodFactsApiService.Received(1).GetProduct(Arg.Any<string>());
         await eanSearchOrgApiService.DidNotReceive().Lookup(Arg.Any<string>(), Arg.Any<string>());
     }
@@ -105,7 +99,7 @@ public class MetadataByGtinQueryHandlerFixture : BaseFixture
         Metadata actual = await queryHandler.ExecuteAsync(new MetadataByGtinQuery("GTIN"));
 
         // Assert
-        actual.ProductFacts?.Name.Should().Be("UnitTest Product");
+        actual.ProductFacts?.Name.ShouldBe("UnitTest Product");
         await openFoodFactsApiService.Received(1).GetProduct(Arg.Any<string>());
         await eanSearchOrgApiService.Received(1).Lookup(Arg.Any<string>(), Arg.Any<string>());
     }

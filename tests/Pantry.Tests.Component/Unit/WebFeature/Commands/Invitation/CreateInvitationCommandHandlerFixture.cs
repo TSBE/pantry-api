@@ -1,15 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Pantry.Common.Time;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -41,11 +33,11 @@ public class CreateInvitationCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateInvitationCommand(AccountFooBar.FriendsCode));
 
         // Assert
-        act.InvitationId.Should().Be(1);
-        act.FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-        act.CreatorId.Should().Be(AccountJohnDoe.AccountId);
-        act.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-        act.ValidUntilDate.Should().Be(validUntil.AddDays(10));
+        act.InvitationId.ShouldBe(1);
+        act.FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+        act.CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+        act.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+        act.ValidUntilDate.ShouldBe(validUntil.AddDays(10));
     }
 
     [Fact]
@@ -74,7 +66,7 @@ public class CreateInvitationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new CreateInvitationCommand(AccountFooBar.FriendsCode));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.BadRequestException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.BadRequestException>();
     }
 
     [Fact]
@@ -100,6 +92,6 @@ public class CreateInvitationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new CreateInvitationCommand(AccountFooBar.FriendsCode));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.ForbiddenException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.ForbiddenException>();
     }
 }

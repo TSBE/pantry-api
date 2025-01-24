@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -39,7 +32,7 @@ public class DeleteAccountCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
             dbContext =>
             {
-                dbContext.Accounts.Should().HaveCount(0);
+                dbContext.Accounts.Count().ShouldBe(0);
             });
     }
 
@@ -58,6 +51,6 @@ public class DeleteAccountCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeleteAccountCommand());
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

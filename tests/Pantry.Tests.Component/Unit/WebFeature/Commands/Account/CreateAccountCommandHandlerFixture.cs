@@ -1,14 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -30,10 +23,10 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateAccountCommand("Jane", "Doe"));
 
         // Assert
-        act.FirstName.Should().BeEquivalentTo("Jane");
-        act.LastName.Should().BeEquivalentTo("Doe");
-        act.OAuhtId.Should().BeEquivalentTo(PrincipalJohnDoeId);
-        act.FriendsCode.Should().NotBeEmpty();
+        act.FirstName.ShouldBeEquivalentTo("Jane");
+        act.LastName.ShouldBeEquivalentTo("Doe");
+        act.OAuhtId.ShouldBeEquivalentTo(PrincipalJohnDoeId);
+        act.FriendsCode.ShouldNotBe(Guid.Empty);
     }
 
     [Fact]
@@ -56,10 +49,10 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateAccountCommand("John", "Smith"));
 
         // Assert
-        act.FirstName.Should().BeEquivalentTo("John");
-        act.LastName.Should().BeEquivalentTo("Smith");
-        act.OAuhtId.Should().BeEquivalentTo(PrincipalJohnDoeId);
-        act.FriendsCode.Should().Be(account.FriendsCode);
+        act.FirstName.ShouldBeEquivalentTo("John");
+        act.LastName.ShouldBeEquivalentTo("Smith");
+        act.OAuhtId.ShouldBeEquivalentTo(PrincipalJohnDoeId);
+        act.FriendsCode.ShouldBe(account.FriendsCode);
     }
 
     [Fact]
@@ -77,6 +70,6 @@ public class CreateAccountCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new CreateAccountCommand("John", "Doe"));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.ForbiddenException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.ForbiddenException>();
     }
 }

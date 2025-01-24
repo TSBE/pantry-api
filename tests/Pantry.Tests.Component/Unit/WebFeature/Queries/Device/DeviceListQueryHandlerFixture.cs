@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -41,7 +34,7 @@ public class DeviceListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Device> devices = await queryHandler.ExecuteAsync(new DeviceListQuery());
 
         // Assert
-        devices.Should().HaveCount(2);
+        devices.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -69,6 +62,6 @@ public class DeviceListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Device> devices = await queryHandler.ExecuteAsync(new DeviceListQuery());
 
         // Assert
-        devices.Should().HaveCount(0);
+        devices.Count.ShouldBe(0);
     }
 }

@@ -1,18 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -69,11 +59,11 @@ public class DeleteArticleCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
             dbContext =>
             {
-                dbContext.Accounts.Should().HaveCount(1);
-                dbContext.Households.Should().HaveCount(1);
-                dbContext.StorageLocations.Should().HaveCount(1);
-                dbContext.Articles.Should().HaveCount(1);
-                dbContext.Articles.FirstOrDefault()!.ArticleId.Should().Be(article2.ArticleId);
+                dbContext.Accounts.Count().ShouldBe(1);
+                dbContext.Households.Count().ShouldBe(1);
+                dbContext.StorageLocations.Count().ShouldBe(1);
+                dbContext.Articles.Count().ShouldBe(1);
+                dbContext.Articles.FirstOrDefault()!.ArticleId.ShouldBe(article2.ArticleId);
             });
     }
 
@@ -98,6 +88,6 @@ public class DeleteArticleCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeleteArticleCommand(1));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

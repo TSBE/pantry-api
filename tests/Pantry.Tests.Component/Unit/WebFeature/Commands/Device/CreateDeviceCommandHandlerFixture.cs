@@ -1,14 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Core.Persistence;
-using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -36,10 +28,10 @@ public class CreateDeviceCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateDeviceCommand(installationId, "iPhone 14", "Foo`s iPhone", Core.Persistence.Enums.DevicePlatformType.IOS, null));
 
         // Assert
-        act.InstallationId.Should().Be(installationId);
-        act.Model.Should().BeEquivalentTo("iPhone 14");
-        act.Name.Should().BeEquivalentTo("Foo`s iPhone");
-        act.Platform.Should().Be(Core.Persistence.Enums.DevicePlatformType.IOS);
-        act.DeviceToken.Should().BeNull();
+        act.InstallationId.ShouldBe(installationId);
+        act.Model.ShouldBeEquivalentTo("iPhone 14");
+        act.Name.ShouldBeEquivalentTo("Foo`s iPhone");
+        act.Platform.ShouldBe(Core.Persistence.Enums.DevicePlatformType.IOS);
+        act.DeviceToken.ShouldBeNull();
     }
 }

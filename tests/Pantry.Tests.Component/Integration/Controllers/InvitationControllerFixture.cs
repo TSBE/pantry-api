@@ -1,20 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Pantry.Common.Time;
-using Pantry.Core.Persistence;
+﻿using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.V1.Controllers.Requests;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
-using Pantry.Tests.Common;
-using Pantry.Tests.Component.Integration.Environment;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Controllers;
 
@@ -34,7 +21,7 @@ public class InvitationControllerFixture : BaseControllerFixture
 
         AccountJohnDoe.Household = HouseholdOfJohnDoe;
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -58,16 +45,16 @@ public class InvitationControllerFixture : BaseControllerFixture
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Invitations.First().HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Invitations.First().CreatorId.Should().Be(AccountJohnDoe.AccountId);
-            dbContext.Invitations.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-            dbContext.Invitations.First().InvitationId.Should().Be(1);
-            dbContext.Invitations.First().ValidUntilDate.Should().Be(contextDateTime.AddDays(10));
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Invitations.First().HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Invitations.First().CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+            dbContext.Invitations.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+            dbContext.Invitations.First().InvitationId.ShouldBe(1);
+            dbContext.Invitations.First().ValidUntilDate.ShouldBe(contextDateTime.AddDays(10));
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -79,7 +66,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountJohnDoe.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountJohnDoe, Household = HouseholdOfJohnDoe, FriendsCode = AccountFooBar.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -99,20 +86,20 @@ public class InvitationControllerFixture : BaseControllerFixture
         var response = await httpClient.PostAsJsonAsync("api/v1/invitations", expectedInvitationRequest);
 
         // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Invitations.First().HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Invitations.First().CreatorId.Should().Be(AccountJohnDoe.AccountId);
-            dbContext.Invitations.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-            dbContext.Invitations.First().InvitationId.Should().Be(1);
-            dbContext.Invitations.First().ValidUntilDate.Should().Be(validUntil);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Invitations.First().HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Invitations.First().CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+            dbContext.Invitations.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+            dbContext.Invitations.First().InvitationId.ShouldBe(1);
+            dbContext.Invitations.First().ValidUntilDate.ShouldBe(validUntil);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -123,7 +110,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountJohnDoe.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountJohnDoe, Household = HouseholdOfJohnDoe, FriendsCode = AccountFooBar.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -138,25 +125,25 @@ public class InvitationControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<InvitationListResponse>("api/v1/invitations/my");
 
         // Assert
-        response.Should().NotBeNull();
-        response!.Invitations.Should().HaveCount(1);
-        response!.Invitations!.First().HouseholdName.Should().Be(HouseholdOfJohnDoe.Name);
-        response!.Invitations!.First().ValidUntilDate.Should().Be(validUntil);
-        response!.Invitations!.First().CreatorName.Should().Be($"{AccountJohnDoe.FirstName} {AccountJohnDoe.LastName}");
-        response!.Invitations!.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
+        response.ShouldNotBeNull();
+        response.Invitations?.Count().ShouldBe(1);
+        response.Invitations!.First().HouseholdName.ShouldBe(HouseholdOfJohnDoe.Name);
+        response.Invitations!.First().ValidUntilDate.ShouldBe(validUntil);
+        response.Invitations!.First().CreatorName.ShouldBe($"{AccountJohnDoe.FirstName} {AccountJohnDoe.LastName}");
+        response.Invitations!.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Invitations.First().HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Invitations.First().CreatorId.Should().Be(AccountJohnDoe.AccountId);
-            dbContext.Invitations.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-            dbContext.Invitations.First().InvitationId.Should().Be(1);
-            dbContext.Invitations.First().ValidUntilDate.Should().Be(validUntil);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Invitations.First().HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Invitations.First().CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+            dbContext.Invitations.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+            dbContext.Invitations.First().InvitationId.ShouldBe(1);
+            dbContext.Invitations.First().ValidUntilDate.ShouldBe(validUntil);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -167,7 +154,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountFooBar.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountFooBar, Household = HouseholdOfJohnDoe, FriendsCode = AccountJohnDoe.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -183,15 +170,15 @@ public class InvitationControllerFixture : BaseControllerFixture
 
         // Assert
         response.EnsureSuccessStatusCode();
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NoContent);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 
@@ -202,7 +189,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountFooBar.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountFooBar, Household = HouseholdOfJohnDoe, FriendsCode = AccountJohnDoe.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -217,15 +204,15 @@ public class InvitationControllerFixture : BaseControllerFixture
         var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/accept", null);
 
         // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().BeNull();
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBeNull();
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 
@@ -236,7 +223,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountFooBar.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountFooBar, Household = HouseholdOfJohnDoe, FriendsCode = AccountJohnDoe.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -252,15 +239,15 @@ public class InvitationControllerFixture : BaseControllerFixture
 
         // Assert
         response.EnsureSuccessStatusCode();
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NoContent);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().BeNull();
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBeNull();
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 
@@ -271,7 +258,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         AccountFooBar.Household = HouseholdOfJohnDoe;
         var invitation = new Invitation { Creator = AccountFooBar, Household = HouseholdOfJohnDoe, FriendsCode = AccountJohnDoe.FriendsCode, ValidUntilDate = validUntil };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
         dbContext =>
         {
             dbContext.Accounts.Add(AccountJohnDoe);
@@ -286,15 +273,15 @@ public class InvitationControllerFixture : BaseControllerFixture
         var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/decline", null);
 
         // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NoContent);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.Should().BeNull();
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountJohnDoe.AccountId).HouseholdId.ShouldBeNull();
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 }

@@ -1,10 +1,4 @@
 ﻿using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Pantry.Tests.Component.Integration.Environment;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Service;
 
@@ -31,6 +25,6 @@ public class DiagnosticsEndpointsFixture
         HttpResponseMessage response = await httpClient.GetAsync(endpoint);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

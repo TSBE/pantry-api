@@ -1,12 +1,6 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Core.Persistence;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -33,9 +27,9 @@ public class CreateStorageLocationCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateStorageLocationCommand("UnitTest", "FooBar Description"));
 
         // Assert
-        act.StorageLocationId.Should().Be(1);
-        act.Name.Should().Be("UnitTest");
-        act.Description.Should().Be("FooBar Description");
-        act.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+        act.StorageLocationId.ShouldBe(1);
+        act.Name.ShouldBe("UnitTest");
+        act.Description.ShouldBe("FooBar Description");
+        act.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
     }
 }

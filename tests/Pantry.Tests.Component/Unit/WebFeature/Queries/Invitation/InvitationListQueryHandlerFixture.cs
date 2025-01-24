@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -38,19 +29,19 @@ public class InvitationListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Invitation> actual = await queryHandler.ExecuteAsync(new InvitationListQuery());
 
         // Assert
-        actual.Should().HaveCount(1);
-        actual.First().CreatorId.Should().Be(AccountJohnDoe.AccountId);
-        actual.First().HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-        actual.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-        actual.First().ValidUntilDate.Should().Be(invitation.ValidUntilDate);
-        actual.First().Household.Should().NotBeNull();
-        actual.First().Creator.Should().NotBeNull();
+        actual.Count.ShouldBe(1);
+        actual.First().CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+        actual.First().HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+        actual.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+        actual.First().ValidUntilDate.ShouldBe(invitation.ValidUntilDate);
+        actual.First().Household.ShouldNotBeNull();
+        actual.First().Creator.ShouldNotBeNull();
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Accounts.Should().HaveCount(1);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Accounts.Count().ShouldBe(1);
         });
     }
 
@@ -75,17 +66,17 @@ public class InvitationListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Invitation> actual = await queryHandler.ExecuteAsync(new InvitationListQuery());
 
         // Assert
-        actual.Should().HaveCount(1);
-        actual.First().CreatorId.Should().Be(AccountJohnDoe.AccountId);
-        actual.First().HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-        actual.First().FriendsCode.Should().Be(AccountFooBar.FriendsCode);
-        actual.First().ValidUntilDate.Should().Be(invitation.ValidUntilDate);
+        actual.Count.ShouldBe(1);
+        actual.First().CreatorId.ShouldBe(AccountJohnDoe.AccountId);
+        actual.First().HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+        actual.First().FriendsCode.ShouldBe(AccountFooBar.FriendsCode);
+        actual.First().ValidUntilDate.ShouldBe(invitation.ValidUntilDate);
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Accounts.Should().HaveCount(2);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Accounts.Count().ShouldBe(2);
         });
     }
 
@@ -113,13 +104,13 @@ public class InvitationListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Invitation> actual = await queryHandler.ExecuteAsync(new InvitationListQuery());
 
         // Assert
-        actual.Should().HaveCount(0);
+        actual.Count.ShouldBe(0);
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Invitations.Should().HaveCount(1);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Accounts.Should().HaveCount(3);
+            dbContext.Invitations.Count().ShouldBe(1);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Accounts.Count().ShouldBe(3);
         });
     }
 }

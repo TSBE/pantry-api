@@ -1,18 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -48,10 +38,10 @@ public class DeclineInvitationCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
             dbContext =>
             {
-                dbContext.Accounts.Should().HaveCount(2);
-                dbContext.Households.Should().HaveCount(1);
-                dbContext.Invitations.Should().HaveCount(0);
-                dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+                dbContext.Accounts.Count().ShouldBe(2);
+                dbContext.Households.Count().ShouldBe(1);
+                dbContext.Invitations.Count().ShouldBe(0);
+                dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
             });
     }
 
@@ -84,10 +74,10 @@ public class DeclineInvitationCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -115,14 +105,14 @@ public class DeclineInvitationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeclineInvitationCommand(AccountFooBar.FriendsCode));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException<Invitation>>();
+        await act.ShouldThrowAsync<EntityNotFoundException<Invitation>>();
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -150,14 +140,14 @@ public class DeclineInvitationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeclineInvitationCommand(Guid.NewGuid()));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.ForbiddenException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.ForbiddenException>();
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().BeNull();
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBeNull();
         });
     }
 
@@ -189,10 +179,10 @@ public class DeclineInvitationCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
         dbContext =>
         {
-            dbContext.Accounts.Should().HaveCount(2);
-            dbContext.Households.Should().HaveCount(1);
-            dbContext.Invitations.Should().HaveCount(0);
-            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.Accounts.Count().ShouldBe(2);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Invitations.Count().ShouldBe(0);
+            dbContext.Accounts.First(x => x.AccountId == AccountFooBar.AccountId).HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -79,14 +78,13 @@ namespace Pantry.Tests.Component.Unit.WebFeature
 
         protected IPrincipal PrincipalOfFooBarWithJohnDoesHousehold { get; }
 
-
         protected IPrincipal PrincipalAuthenticatedUser1 { get; }
 
-        private static IPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
+        private static ClaimsPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString(CultureInfo.InvariantCulture)),
+                new(ClaimTypes.NameIdentifier, userId.ToString(CultureInfo.InvariantCulture)),
             };
 
             claims.AddRange(moreClaims);

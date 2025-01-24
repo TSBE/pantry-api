@@ -1,16 +1,7 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Pantry.Core.Persistence;
+﻿using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.V1.Controllers.Requests;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
-using Pantry.Tests.Component.Integration.Environment;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Controllers;
 
@@ -27,7 +18,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -49,9 +40,9 @@ public class HouseholdControllerFixture : BaseControllerFixture
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Households.Count().Should().Be(1);
-            dbContext.Households.FirstOrDefault()!.Name.Should().Be(expectedHouseholdRequest.Name);
-            dbContext.Households.FirstOrDefault()!.SubscriptionType.Should().Be(Core.Persistence.Enums.SubscriptionType.FREE);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Households.FirstOrDefault()!.Name.ShouldBe(expectedHouseholdRequest.Name);
+            dbContext.Households.FirstOrDefault()!.SubscriptionType.ShouldBe(Core.Persistence.Enums.SubscriptionType.FREE);
         });
     }
 
@@ -62,7 +53,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var household = new Household { Name = "Test", SubscriptionType = Core.Persistence.Enums.SubscriptionType.FREE };
         AccountJohnDoe.Household = household;
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -81,13 +72,13 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var response = await httpClient.PostAsJsonAsync("api/v1/households/my", expectedHouseholdRequest);
 
         // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Households.Count().Should().Be(1);
-            dbContext.Households.FirstOrDefault()!.Name.Should().Be(expectedHouseholdRequest.Name);
-            dbContext.Households.FirstOrDefault()!.SubscriptionType.Should().Be(Core.Persistence.Enums.SubscriptionType.FREE);
+            dbContext.Households.Count().ShouldBe(1);
+            dbContext.Households.FirstOrDefault()!.Name.ShouldBe(expectedHouseholdRequest.Name);
+            dbContext.Households.FirstOrDefault()!.SubscriptionType.ShouldBe(Core.Persistence.Enums.SubscriptionType.FREE);
         });
     }
 
@@ -98,7 +89,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var household = new Household { Name = "Test", SubscriptionType = Core.Persistence.Enums.SubscriptionType.FREE };
         AccountJohnDoe.Household = household;
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -111,14 +102,14 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<HouseholdResponse>("api/v1/households/my", JsonSerializerOptions);
 
         // Assert
-        response.Should().NotBeNull();
-        response!.Name.Should().Be("Test");
-        response!.SubscriptionType.Should().Be(Features.WebFeature.V1.Controllers.Enums.SubscriptionType.FREE);
+        response.ShouldNotBeNull();
+        response.Name.ShouldBe("Test");
+        response.SubscriptionType.ShouldBe(Features.WebFeature.V1.Controllers.Enums.SubscriptionType.FREE);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Count().Should().Be(1);
-            dbContext.Households.Count().Should().Be(1);
+            dbContext.Accounts.Count().ShouldBe(1);
+            dbContext.Households.Count().ShouldBe(1);
         });
     }
 
@@ -127,7 +118,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -139,12 +130,12 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var response = await httpClient.GetAsync("api/v1/households/my");
 
         // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NotFound);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.Accounts.Count().Should().Be(1);
-            dbContext.Households.Count().Should().Be(0);
+            dbContext.Accounts.Count().ShouldBe(1);
+            dbContext.Households.Count().ShouldBe(0);
         });
     }
 }

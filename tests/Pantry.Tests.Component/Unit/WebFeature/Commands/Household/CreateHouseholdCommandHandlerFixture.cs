@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Core.Persistence.Enums;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -35,8 +28,8 @@ public class CreateHouseholdCommandHandlerFixture : BaseFixture
         var act = await commandHandler.ExecuteAsync(new CreateHouseholdCommand("Test", SubscriptionType.FREE));
 
         // Assert
-        act.Name.Should().Be("Test");
-        act.SubscriptionType.Should().Be(SubscriptionType.FREE);
+        act.Name.ShouldBe("Test");
+        act.SubscriptionType.ShouldBe(SubscriptionType.FREE);
     }
 
     [Fact]
@@ -61,7 +54,7 @@ public class CreateHouseholdCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new CreateHouseholdCommand("Test", SubscriptionType.FREE));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.BadRequestException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.BadRequestException>();
     }
 
     [Fact]
@@ -79,6 +72,6 @@ public class CreateHouseholdCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new CreateHouseholdCommand("Test", SubscriptionType.FREE));
 
         // Assert
-        await act.Should().ThrowAsync<Opw.HttpExceptions.ForbiddenException>();
+        await act.ShouldThrowAsync<Opw.HttpExceptions.ForbiddenException>();
     }
 }

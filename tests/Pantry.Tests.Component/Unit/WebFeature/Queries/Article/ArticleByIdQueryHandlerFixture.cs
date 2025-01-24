@@ -1,16 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -49,15 +41,15 @@ public class ArticleByIdQueryHandlerFixture : BaseFixture
         Article actual = await queryHandler.ExecuteAsync(new ArticleByIdQuery(article.ArticleId));
 
         // Assert
-        actual.StorageLocationId.Should().Be(article.StorageLocationId);
-        actual.HouseholdId.Should().Be(article.HouseholdId);
-        actual.ArticleId.Should().Be(article.ArticleId);
-        actual.GlobalTradeItemNumber.Should().Be(article.GlobalTradeItemNumber);
-        actual.Name.Should().Be(article.Name);
-        actual.BestBeforeDate.Should().Be(article.BestBeforeDate);
-        actual.Quantity.Should().Be(article.Quantity);
-        actual.Content.Should().Be(article.Content);
-        actual.ContentType.Should().Be(article.ContentType);
+        actual.StorageLocationId.ShouldBe(article.StorageLocationId);
+        actual.HouseholdId.ShouldBe(article.HouseholdId);
+        actual.ArticleId.ShouldBe(article.ArticleId);
+        actual.GlobalTradeItemNumber.ShouldBe(article.GlobalTradeItemNumber);
+        actual.Name.ShouldBe(article.Name);
+        actual.BestBeforeDate.ShouldBe(article.BestBeforeDate);
+        actual.Quantity.ShouldBe(article.Quantity);
+        actual.Content.ShouldBe(article.Content);
+        actual.ContentType.ShouldBe(article.ContentType);
     }
 
     [Fact]
@@ -94,16 +86,16 @@ public class ArticleByIdQueryHandlerFixture : BaseFixture
         Article actual = await queryHandler.ExecuteAsync(new ArticleByIdQuery(article.ArticleId));
 
         // Assert
-        actual.StorageLocationId.Should().Be(article.StorageLocationId);
-        actual.HouseholdId.Should().Be(article.HouseholdId);
-        actual.ArticleId.Should().Be(article.ArticleId);
-        actual.GlobalTradeItemNumber.Should().Be(article.GlobalTradeItemNumber);
-        actual.Name.Should().Be(article.Name);
-        actual.BestBeforeDate.Should().Be(article.BestBeforeDate);
-        actual.Quantity.Should().Be(article.Quantity);
-        actual.Content.Should().Be(article.Content);
-        actual.ContentType.Should().Be(article.ContentType);
-        actual.Metadata?.FoodFacts?.Brands.Should().Be(metadata.FoodFacts.Brands);
+        actual.StorageLocationId.ShouldBe(article.StorageLocationId);
+        actual.HouseholdId.ShouldBe(article.HouseholdId);
+        actual.ArticleId.ShouldBe(article.ArticleId);
+        actual.GlobalTradeItemNumber.ShouldBe(article.GlobalTradeItemNumber);
+        actual.Name.ShouldBe(article.Name);
+        actual.BestBeforeDate.ShouldBe(article.BestBeforeDate);
+        actual.Quantity.ShouldBe(article.Quantity);
+        actual.Content.ShouldBe(article.Content);
+        actual.ContentType.ShouldBe(article.ContentType);
+        actual.Metadata?.FoodFacts?.Brands.ShouldBe(metadata.FoodFacts.Brands);
     }
 
     [Fact]
@@ -140,16 +132,16 @@ public class ArticleByIdQueryHandlerFixture : BaseFixture
         Article actual = await queryHandler.ExecuteAsync(new ArticleByIdQuery(article.ArticleId));
 
         // Assert
-        actual.StorageLocationId.Should().Be(article.StorageLocationId);
-        actual.HouseholdId.Should().Be(article.HouseholdId);
-        actual.ArticleId.Should().Be(article.ArticleId);
-        actual.GlobalTradeItemNumber.Should().Be(article.GlobalTradeItemNumber);
-        actual.Name.Should().Be(article.Name);
-        actual.BestBeforeDate.Should().Be(article.BestBeforeDate);
-        actual.Quantity.Should().Be(article.Quantity);
-        actual.Content.Should().Be(article.Content);
-        actual.ContentType.Should().Be(article.ContentType);
-        actual.Metadata.Should().BeNull();
+        actual.StorageLocationId.ShouldBe(article.StorageLocationId);
+        actual.HouseholdId.ShouldBe(article.HouseholdId);
+        actual.ArticleId.ShouldBe(article.ArticleId);
+        actual.GlobalTradeItemNumber.ShouldBe(article.GlobalTradeItemNumber);
+        actual.Name.ShouldBe(article.Name);
+        actual.BestBeforeDate.ShouldBe(article.BestBeforeDate);
+        actual.Quantity.ShouldBe(article.Quantity);
+        actual.Content.ShouldBe(article.Content);
+        actual.ContentType.ShouldBe(article.ContentType);
+        actual.Metadata.ShouldBeNull();
     }
 
     [Fact]
@@ -171,6 +163,6 @@ public class ArticleByIdQueryHandlerFixture : BaseFixture
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new ArticleByIdQuery(1));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }
