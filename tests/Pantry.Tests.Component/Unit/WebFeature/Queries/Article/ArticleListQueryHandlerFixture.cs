@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -63,7 +55,7 @@ public class ArticleListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Article> articles = await queryHandler.ExecuteAsync(new ArticleListQuery());
 
         // Assert
-        articles.Should().HaveCount(2);
+        articles.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -112,6 +104,6 @@ public class ArticleListQueryHandlerFixture : BaseFixture
         IReadOnlyCollection<Article> articles = await queryHandler.ExecuteAsync(new ArticleListQuery());
 
         // Assert
-        articles.Should().HaveCount(0);
+        articles.Count.ShouldBe(0);
     }
 }

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -35,7 +28,7 @@ public class DeviceByIdQueryHandlerFixture : BaseFixture
         Device actual = await queryHandler.ExecuteAsync(new DeviceByIdQuery(device.InstallationId));
 
         // Assert
-        actual.InstallationId.Should().Be(device.InstallationId);
+        actual.InstallationId.ShouldBe(device.InstallationId);
     }
 
     [Fact]
@@ -51,6 +44,6 @@ public class DeviceByIdQueryHandlerFixture : BaseFixture
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new DeviceByIdQuery(Guid.NewGuid()));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

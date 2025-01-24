@@ -1,16 +1,7 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Pantry.Core.Persistence;
+﻿using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.V1.Controllers.Requests;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
-using Pantry.Tests.Component.Integration.Environment;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Controllers;
 
@@ -29,7 +20,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         var storageLocation2 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 2, Name = "Unit Location", Description = "Foo Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -44,8 +35,8 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<StorageLocationListResponse>("api/v1/storage-locations", JsonSerializerOptions);
 
         // Assert
-        response!.StorageLocations.Should().HaveCount(2);
-        response!.StorageLocations!.First().Id.Should().Be(storageLocation1.StorageLocationId);
+        response!.StorageLocations?.Count().ShouldBe(2);
+        response.StorageLocations!.First().Id.ShouldBe(storageLocation1.StorageLocationId);
     }
 
     [Fact]
@@ -55,7 +46,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         var storageLocation2 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 2, Name = "Unit Location", Description = "Foo Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -70,7 +61,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var response = await httpClient.GetFromJsonAsync<StorageLocationResponse>($"api/v1/storage-locations/{storageLocation1.StorageLocationId}", JsonSerializerOptions);
 
         // Assert
-        response!.Id.Should().Be(storageLocation1.StorageLocationId);
+        response!.Id.ShouldBe(storageLocation1.StorageLocationId);
     }
 
     [Fact]
@@ -78,7 +69,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -94,18 +85,18 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync<StorageLocationRequest>("api/v1/storage-locations", expectedStorageLocationRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/storage-locations", expectedStorageLocationRequest);
 
         // Assert
         response.EnsureSuccessStatusCode();
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.StorageLocations.Count().Should().Be(1);
-            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.Should().Be(1);
-            dbContext.StorageLocations.FirstOrDefault()!.Name.Should().Be(expectedStorageLocationRequest.Name);
-            dbContext.StorageLocations.FirstOrDefault()!.Description.Should().Be(expectedStorageLocationRequest.Description);
-            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.StorageLocations.Count().ShouldBe(1);
+            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.ShouldBe(1);
+            dbContext.StorageLocations.FirstOrDefault()!.Name.ShouldBe(expectedStorageLocationRequest.Name);
+            dbContext.StorageLocations.FirstOrDefault()!.Description.ShouldBe(expectedStorageLocationRequest.Description);
+            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 
@@ -115,7 +106,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         // Arrange
         var storageLocation = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -132,18 +123,18 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync<StorageLocationRequest>($"api/v1/storage-locations/{storageLocation.StorageLocationId}", expectedStorageLocationRequest);
+        var response = await httpClient.PutAsJsonAsync($"api/v1/storage-locations/{storageLocation.StorageLocationId}", expectedStorageLocationRequest);
 
         // Assert
         response.EnsureSuccessStatusCode();
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.StorageLocations.Count().Should().Be(1);
-            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.Should().Be(1);
-            dbContext.StorageLocations.FirstOrDefault()!.Name.Should().Be(expectedStorageLocationRequest.Name);
-            dbContext.StorageLocations.FirstOrDefault()!.Description.Should().Be(expectedStorageLocationRequest.Description);
-            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.StorageLocations.Count().ShouldBe(1);
+            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.ShouldBe(1);
+            dbContext.StorageLocations.FirstOrDefault()!.Name.ShouldBe(expectedStorageLocationRequest.Name);
+            dbContext.StorageLocations.FirstOrDefault()!.Description.ShouldBe(expectedStorageLocationRequest.Description);
+            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 
@@ -154,7 +145,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         var storageLocation2 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 2, Name = "Unit Location", Description = "Foo Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        testApplication.SetupDatabase<AppDbContext>(
+        await testApplication.SetupDatabaseAsync<AppDbContext>(
             dbContext =>
             {
                 dbContext.Accounts.Add(AccountJohnDoe);
@@ -173,11 +164,11 @@ public class StorageLocationControllerFixture : BaseControllerFixture
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {
-            dbContext.StorageLocations.Count().Should().Be(1);
-            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.Should().Be(storageLocation2.StorageLocationId);
-            dbContext.StorageLocations.FirstOrDefault()!.Name.Should().Be(storageLocation2.Name);
-            dbContext.StorageLocations.FirstOrDefault()!.Description.Should().Be(storageLocation2.Description);
-            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
+            dbContext.StorageLocations.Count().ShouldBe(1);
+            dbContext.StorageLocations.FirstOrDefault()!.StorageLocationId.ShouldBe(storageLocation2.StorageLocationId);
+            dbContext.StorageLocations.FirstOrDefault()!.Name.ShouldBe(storageLocation2.Name);
+            dbContext.StorageLocations.FirstOrDefault()!.Description.ShouldBe(storageLocation2.Description);
+            dbContext.StorageLocations.FirstOrDefault()!.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
         });
     }
 }

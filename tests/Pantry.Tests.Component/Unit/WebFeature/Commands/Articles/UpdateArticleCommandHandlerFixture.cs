@@ -1,17 +1,8 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
-using Pantry.Common.Time;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -60,15 +51,15 @@ public class UpdateArticleCommandHandlerFixture : BaseFixture
             ContentType: Core.Persistence.Enums.ContentType.UNKNOWN));
 
         // Assert
-        act.StorageLocationId.Should().Be(StorageLocationOfJohnDoe.StorageLocationId);
-        act.HouseholdId.Should().Be(HouseholdOfJohnDoe.HouseholdId);
-        act.ArticleId.Should().Be(1);
-        act.GlobalTradeItemNumber.Should().Be("GTIN-Updated");
-        act.Name.Should().Be("Coffee Updated");
-        act.BestBeforeDate.Should().Be(article.BestBeforeDate);
-        act.Quantity.Should().Be(42);
-        act.Content.Should().Be("Capsule");
-        act.ContentType.Should().Be(Core.Persistence.Enums.ContentType.UNKNOWN);
+        act.StorageLocationId.ShouldBe(StorageLocationOfJohnDoe.StorageLocationId);
+        act.HouseholdId.ShouldBe(HouseholdOfJohnDoe.HouseholdId);
+        act.ArticleId.ShouldBe(1);
+        act.GlobalTradeItemNumber.ShouldBe("GTIN-Updated");
+        act.Name.ShouldBe("Coffee Updated");
+        act.BestBeforeDate.ShouldBe(article.BestBeforeDate);
+        act.Quantity.ShouldBe(42);
+        act.Content.ShouldBe("Capsule");
+        act.ContentType.ShouldBe(Core.Persistence.Enums.ContentType.UNKNOWN);
     }
 
     [Fact]
@@ -100,6 +91,6 @@ public class UpdateArticleCommandHandlerFixture : BaseFixture
             ContentType: Core.Persistence.Enums.ContentType.UNKNOWN));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Hosting;
 using Pantry.Service;
-using Xunit;
 
 namespace Pantry.Tests.Component.Integration.Service;
 
@@ -14,10 +11,10 @@ public class ProgramFixture
     {
         get
         {
-            yield return new object[] { Environments.Development };
-            yield return new object[] { Pantry.Common.Hosting.Environments.IntegrationTest };
-            yield return new object[] { Environments.Staging };
-            yield return new object[] { Environments.Production };
+            yield return [Environments.Development];
+            yield return [Pantry.Common.Hosting.Environments.IntegrationTest];
+            yield return [Environments.Staging];
+            yield return [Environments.Production];
         }
     }
 
@@ -31,6 +28,6 @@ public class ProgramFixture
             hostBuilder.UseEnvironment(environment);
             hostBuilder.Build();
         };
-        createWebHostBuilder.Should().NotThrow();
+        createWebHostBuilder.ShouldNotThrow();
     }
 }

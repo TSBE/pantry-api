@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Pantry.Common;
 using Pantry.Common.Authentication;
 using Pantry.Core.Persistence.Entities;
-using Xunit.Abstractions;
 
 namespace Pantry.Tests.Component.Integration.Controllers;
 
@@ -75,11 +73,11 @@ public abstract class BaseControllerFixture
         Description = "Test Description"
     };
 
-    private static IPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
+    private static ClaimsPrincipal CreatePrincipal(string userId, params Claim[] moreClaims)
     {
         var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString(CultureInfo.InvariantCulture)),
+                new(ClaimTypes.NameIdentifier, userId.ToString(CultureInfo.InvariantCulture)),
             };
 
         claims.AddRange(moreClaims);

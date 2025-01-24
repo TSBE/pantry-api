@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -34,7 +27,7 @@ public class AccountQueryHandlerFixture : BaseFixture
         Account actual = await queryHandler.ExecuteAsync(new AccountQuery());
 
         // Assert
-        actual.Should().BeEquivalentTo(account);
+        actual.ShouldBeEquivalentTo(account);
     }
 
     [Fact]
@@ -50,6 +43,6 @@ public class AccountQueryHandlerFixture : BaseFixture
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new AccountQuery());
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -36,10 +29,10 @@ public class StorageLocationByIdQueryHandlerFixture : BaseFixture
         StorageLocation actual = await queryHandler.ExecuteAsync(new StorageLocationByIdQuery(storageLocation.StorageLocationId));
 
         // Assert
-        actual.StorageLocationId.Should().Be(storageLocation.StorageLocationId);
-        actual.Name.Should().Be(storageLocation.Name);
-        actual.Description.Should().Be(storageLocation.Description);
-        actual.HouseholdId.Should().Be(storageLocation.HouseholdId);
+        actual.StorageLocationId.ShouldBe(storageLocation.StorageLocationId);
+        actual.Name.ShouldBe(storageLocation.Name);
+        actual.Description.ShouldBe(storageLocation.Description);
+        actual.HouseholdId.ShouldBe(storageLocation.HouseholdId);
     }
 
     [Fact]
@@ -60,6 +53,6 @@ public class StorageLocationByIdQueryHandlerFixture : BaseFixture
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new StorageLocationByIdQuery(1));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Core.Persistence.Enums;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Queries;
 
@@ -37,8 +30,8 @@ public class HouseholdQueryHandlerFixture : BaseFixture
         Household actual = await queryHandler.ExecuteAsync(new HouseholdQuery());
 
         // Assert
-        actual.Name.Should().Be(household.Name);
-        actual.SubscriptionType.Should().Be(household.SubscriptionType);
+        actual.Name.ShouldBe(household.Name);
+        actual.SubscriptionType.ShouldBe(household.SubscriptionType);
     }
 
     [Fact]
@@ -58,6 +51,6 @@ public class HouseholdQueryHandlerFixture : BaseFixture
         Func<Task> act = async () => await queryHandler.ExecuteAsync(new HouseholdQuery());
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }

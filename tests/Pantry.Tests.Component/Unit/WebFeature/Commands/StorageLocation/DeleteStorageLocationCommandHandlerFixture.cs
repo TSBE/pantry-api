@@ -1,16 +1,8 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
+﻿using Microsoft.Extensions.Logging;
 using Pantry.Common.EntityFrameworkCore.Exceptions;
 using Pantry.Core.Persistence;
 using Pantry.Core.Persistence.Entities;
 using Pantry.Features.WebFeature.Commands;
-using Pantry.Tests.EntityFrameworkCore.Extensions;
-using Pantry.Tests.EntityFrameworkCore.Persistence;
-using Xunit;
 
 namespace Pantry.Tests.Component.Unit.WebFeature.Commands;
 
@@ -44,9 +36,9 @@ public class DeleteStorageLocationCommandHandlerFixture : BaseFixture
         testDatabase.AssertDatabaseContent(
             dbContext =>
             {
-                dbContext.Accounts.Should().HaveCount(1);
-                dbContext.Households.Should().HaveCount(1);
-                dbContext.StorageLocations.Should().HaveCount(1);
+                dbContext.Accounts.Count().ShouldBe(1);
+                dbContext.Households.Count().ShouldBe(1);
+                dbContext.StorageLocations.Count().ShouldBe(1);
             });
     }
 
@@ -70,6 +62,6 @@ public class DeleteStorageLocationCommandHandlerFixture : BaseFixture
         Func<Task> act = async () => await commandHandler.ExecuteAsync(new DeleteStorageLocationCommand(1));
 
         // Assert
-        await act.Should().ThrowAsync<EntityNotFoundException>();
+        await act.ShouldThrowAsync<EntityNotFoundException>();
     }
 }
