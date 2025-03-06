@@ -9,7 +9,7 @@
       <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
       <PackageReference Include="Silverback.Core.Model" Version="4.6.1" />
-      <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="4.0.0" />
+      <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="4.1.0" />
    </ItemGroup>
 
    <ItemGroup>
