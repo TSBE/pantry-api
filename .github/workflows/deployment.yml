@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # the 2nd condition
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} && (github.ref == 'refs/heads/main') && ${{ vars.DEPLOY_ENABLED != 'false' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' && (vars.DEPLOY_ENABLED || 'true') != 'false' }}
     steps:
       - name: Jelastic CLI
         # uses: abhisek91/github-actions-jelastic@v2
