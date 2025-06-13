@@ -18,10 +18,7 @@ public static class IntegrationTestExtensions
     /// <param name="dateTime">The <see cref="DateTime" /> to use as current point of time during the request.</param>
     public static void WithDateTimeContext(this HttpRequestMessage requestMessage, DateTime dateTime)
     {
-        if (requestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(requestMessage));
-        }
+        ArgumentNullException.ThrowIfNull(requestMessage);
 
         requestMessage.Headers.Add(DateTimeContextMiddleware.DateTimeContextHttpHeaderName, dateTime.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture));
     }
@@ -33,10 +30,7 @@ public static class IntegrationTestExtensions
     /// <param name="dateTime">The <see cref="DateTime" /> to use as current point of time during the request.</param>
     public static void WithDateTimeContext(this HttpContent httpContent, DateTime dateTime)
     {
-        if (httpContent == null)
-        {
-            throw new ArgumentNullException(nameof(httpContent));
-        }
+        ArgumentNullException.ThrowIfNull(httpContent);
 
         httpContent.Headers.Add(DateTimeContextMiddleware.DateTimeContextHttpHeaderName, dateTime.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture));
     }
@@ -48,10 +42,7 @@ public static class IntegrationTestExtensions
     /// <param name="dateTime">The <see cref="DateTime" /> to use as current point of time during the request.</param>
     public static void StartDateTimeContext(this HttpClient client, DateTime dateTime)
     {
-        if (client == null)
-        {
-            throw new ArgumentNullException(nameof(client));
-        }
+        ArgumentNullException.ThrowIfNull(client);
 
         client.DefaultRequestHeaders.Add(DateTimeContextMiddleware.DateTimeContextHttpHeaderName, dateTime.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture));
     }
@@ -62,10 +53,7 @@ public static class IntegrationTestExtensions
     /// <param name="client">The <see cref="HttpClient" /> to remove the default header from.</param>
     public static void EndDateTimeContext(this HttpClient client)
     {
-        if (client == null)
-        {
-            throw new ArgumentNullException(nameof(client));
-        }
+        ArgumentNullException.ThrowIfNull(client);
 
         client.DefaultRequestHeaders.Remove(DateTimeContextMiddleware.DateTimeContextHttpHeaderName);
     }

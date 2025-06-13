@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Pantry.Service.Infrastructure;
 
-public class SwaggerGenConfiguration : IConfigureOptions<SwaggerGenOptions>
+internal class SwaggerGenConfiguration : IConfigureOptions<SwaggerGenOptions>
 {
     private readonly IApiVersionDescriptionProvider _provider;
 

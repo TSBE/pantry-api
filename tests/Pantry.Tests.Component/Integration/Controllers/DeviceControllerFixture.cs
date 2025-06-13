@@ -81,7 +81,7 @@ public class DeviceControllerFixture : BaseControllerFixture
             InstallationId = Guid.NewGuid(),
             Model = "Integration Test",
             Name = "Integration Phone",
-            Platform = DevicePlatformType.ANDROID
+            Platform = DevicePlatformTypeDto.ANDROID
         };
 
         // Act

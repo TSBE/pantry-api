@@ -22,8 +22,9 @@
    <ItemGroup>
       <ProjectReference Include="..\Pantry.Features\Pantry.Features.csproj" />
    </ItemGroup>
-
+   
    <ItemGroup>
+      <InternalsVisibleTo Include="Pantry.Tests.Component" />
       <Content Update="appsettings.json">
          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </Content>

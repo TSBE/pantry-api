@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Pantry.Service;
 
-public static class Program
+internal static class Program
 {
     [ExcludeFromCodeCoverage(Justification = "Not testable.")]
     public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();

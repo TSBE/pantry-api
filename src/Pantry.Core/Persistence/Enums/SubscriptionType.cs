@@ -1,5 +1,6 @@
 ﻿namespace Pantry.Core.Persistence.Enums;
 
+// Domain model
 public enum SubscriptionType
 {
     UNKNOWN = 0,

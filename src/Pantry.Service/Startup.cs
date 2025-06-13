@@ -33,7 +33,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Pantry.Service;
 
-public class Startup
+internal class Startup
 {
     public Startup(IConfiguration configuration)
     {

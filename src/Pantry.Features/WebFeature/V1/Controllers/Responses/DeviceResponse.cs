@@ -23,7 +23,7 @@ public class DeviceResponse
     /// <summary>
     /// Information about the operating system.
     /// </summary>
-    public DevicePlatformType Platform { get; set; }
+    public DevicePlatformTypeDto Platform { get; set; }
 
     /// <summary>
     /// Installation identifier.
