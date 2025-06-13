@@ -29,7 +29,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var expectedHouseholdRequest = new HouseholdRequest
         {
             Name = "Test",
-            SubscriptionType = Features.WebFeature.V1.Controllers.Enums.SubscriptionType.FREE,
+            SubscriptionType = Features.WebFeature.V1.Controllers.Enums.SubscriptionTypeDto.FREE,
         };
 
         // Act
@@ -65,7 +65,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         var expectedHouseholdRequest = new HouseholdRequest
         {
             Name = "Test",
-            SubscriptionType = Features.WebFeature.V1.Controllers.Enums.SubscriptionType.FREE,
+            SubscriptionType = Features.WebFeature.V1.Controllers.Enums.SubscriptionTypeDto.FREE,
         };
 
         // Act
@@ -104,7 +104,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         // Assert
         response.ShouldNotBeNull();
         response.Name.ShouldBe("Test");
-        response.SubscriptionType.ShouldBe(Features.WebFeature.V1.Controllers.Enums.SubscriptionType.FREE);
+        response.SubscriptionType.ShouldBe(Features.WebFeature.V1.Controllers.Enums.SubscriptionTypeDto.FREE);
 
         testApplication.AssertDatabaseContent<AppDbContext>(dbContext =>
         {

@@ -5,7 +5,7 @@ using Pantry.Service;
 
 namespace Pantry.Tests.Component.Integration.Environment;
 
-public class IntegrationTestWebApplicationFactory : IntegrationTestWebApplicationFactoryBase<Startup>
+internal sealed class IntegrationTestWebApplicationFactory : IntegrationTestWebApplicationFactoryBase<Startup>
 {
     private readonly Action<IServiceCollection>? _servicesConfigAction;
 

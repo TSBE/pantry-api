@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
-using Pantry.Features.WebFeature.V1.Controllers.Mappers;
+using Pantry.Features.WebFeature.V1.Controllers.Extensions;
 using Pantry.Features.WebFeature.V1.Controllers.Requests;
 using Pantry.Features.WebFeature.V1.Controllers.Responses;
 using Silverback.Messaging.Publishing;

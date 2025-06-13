@@ -48,7 +48,7 @@ public class ArticleResponse
     /// <summary>
     /// The content type of the article.
     /// </summary>
-    public ContentType ContentType { get; set; }
+    public ContentTypeDto ContentType { get; set; }
 
     /// <summary>
     /// The brands.

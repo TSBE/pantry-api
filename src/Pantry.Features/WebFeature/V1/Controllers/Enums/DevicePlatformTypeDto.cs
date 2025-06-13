@@ -1,9 +1,9 @@
 ﻿namespace Pantry.Features.WebFeature.V1.Controllers.Enums;
 
-public enum SubscriptionType
+// DTO (response)
+public enum DevicePlatformTypeDto
 {
     UNKNOWN,
-    FREE,
-    PREMIUM,
-    FAMILY
+    ANDROID,
+    IOS
 }

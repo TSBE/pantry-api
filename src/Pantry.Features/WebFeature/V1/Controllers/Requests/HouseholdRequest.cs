@@ -16,5 +16,5 @@ public class HouseholdRequest
     /// <summary>
     /// The Subscription type.
     /// </summary>
-    public SubscriptionType SubscriptionType { get; set; }
+    public SubscriptionTypeDto SubscriptionType { get; set; }
 }

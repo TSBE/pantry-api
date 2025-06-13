@@ -42,5 +42,5 @@ public class ArticleRequest
     /// <summary>
     /// The content type of the article.
     /// </summary>
-    public ContentType ContentType { get; set; }
+    public ContentTypeDto ContentType { get; set; }
 }

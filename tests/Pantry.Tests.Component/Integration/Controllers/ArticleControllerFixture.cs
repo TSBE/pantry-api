@@ -114,7 +114,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         // Assert
         response!.BestBeforeDate.ShouldBe(article1.BestBeforeDate);
         response.Content.ShouldBe(article1.Content);
-        response.ContentType.ShouldBe(ContentType.UNKNOWN);
+        response.ContentType.ShouldBe(ContentTypeDto.UNKNOWN);
         response.GlobalTradeItemNumber.ShouldBe(article1.GlobalTradeItemNumber);
         response.Id.ShouldBe(article1.ArticleId);
         response.Name.ShouldBe(article1.Name);
@@ -145,7 +145,7 @@ public class ArticleControllerFixture : BaseControllerFixture
             BestBeforeDate = DateTimeProvider.UtcNow,
             Quantity = 10,
             Content = "Capsule",
-            ContentType = ContentType.UNKNOWN
+            ContentType = ContentTypeDto.UNKNOWN
         };
 
         // Act
@@ -205,7 +205,7 @@ public class ArticleControllerFixture : BaseControllerFixture
             BestBeforeDate = DateTimeProvider.UtcNow,
             Quantity = 2,
             Content = "Pack",
-            ContentType = ContentType.UNKNOWN
+            ContentType = ContentTypeDto.UNKNOWN
         };
 
         // Act
