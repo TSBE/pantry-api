@@ -107,7 +107,7 @@ public static class ServiceCollectionExtensions
         {
             ValidateIssuerSigningKey = true,
             ValidIssuers = validIssuers,
-            ValidateAudience = validAudiences.Any(),
+            ValidateAudience = validAudiences.Count != 0,
             ValidAudiences = validAudiences,
             IssuerSigningKeys = GetSigningKeys(signingKeyCertificates)
         };

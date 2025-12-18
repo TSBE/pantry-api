@@ -10,7 +10,7 @@ public static class HealthCheckConstants
     ///     Defines the possible tags to be assigned to health checks.
     ///     Use tags to group health checks by their purpose.
     /// </summary>
-    public static class Tags
+    internal static class Tags
     {
         /// <summary>
         ///     Tags to be assigned to health checks which are executed for a readiness probe.
@@ -31,7 +31,7 @@ public static class HealthCheckConstants
     /// <summary>
     ///     Defines the endpoints which exposes the health checks.
     /// </summary>
-    public static class Endpoints
+    internal static class Endpoints
     {
         /// <summary>
         ///     The endpoint to probe for the readiness check.

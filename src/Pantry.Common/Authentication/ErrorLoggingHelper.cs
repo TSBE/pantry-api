@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Pantry.Common.Authentication;
 
-internal class ErrorLoggingHelper
+internal sealed class ErrorLoggingHelper
 {
     private ILogger<ErrorLoggingHelper>? _logger;
 

@@ -32,10 +32,7 @@ public static class EndpointConventionBuilderExtensions
         bool includeDetailsInResponse,
         Action<IEndpointConventionBuilder>? customizationAction)
     {
-        if (endpoints == null)
-        {
-            throw new ArgumentNullException(nameof(endpoints));
-        }
+        ArgumentNullException.ThrowIfNull(endpoints);
 
         var responseWriter = new JsonResponseWriter(includeDetailsInResponse);
 
@@ -46,7 +43,7 @@ public static class EndpointConventionBuilderExtensions
             {
                 Predicate = check => check.Tags.Contains(HealthCheckConstants.Tags.ReadinessTag),
                 ResponseWriter = responseWriter.WriteResponse,
-                AllowCachingResponses = false
+                AllowCachingResponses = false,
             }));
         customizationAction.Invoke(
             endpoints.MapHealthChecks(HealthCheckConstants.Endpoints.LivenessProbeUrl, new HealthCheckOptions

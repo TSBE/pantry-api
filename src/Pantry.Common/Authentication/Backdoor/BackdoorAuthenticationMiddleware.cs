@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -59,9 +58,12 @@ public class BackdoorAuthenticationMiddleware
             {
                 context.User = userPrincipal;
 
-                _logger.LogWarning(
-                    "User {UserId} authenticated via backdoor.",
-                    context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (_logger.IsEnabled(LogLevel.Warning))
+                {
+                    _logger.LogWarning(
+                        "User {UserId} authenticated via backdoor.",
+                        context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                }
             }
         }
 
