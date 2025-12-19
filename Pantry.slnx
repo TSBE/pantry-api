@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/Shared/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="Global.ruleset" />
+    <File Path="GlobalTest.ruleset" />
+    <File Path="Pantry.sln.DotSettings" />
+    <File Path="README.md" />
+    <File Path="stylecop.json" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Pantry.Tests.Common/Pantry.Tests.Common.csproj" />
+    <Project Path="tests/Pantry.Tests.Component/Pantry.Tests.Component.csproj" />
+  </Folder>
+  <Project Path="src/Pantry.Common/Pantry.Common.csproj" />
+  <Project Path="src/Pantry.Core/Pantry.Core.csproj" />
+  <Project Path="src/Pantry.DockerCompose/docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="src/Pantry.Features/Pantry.Features.csproj" />
+  <Project Path="src/Pantry.Service/Pantry.Service.csproj" />
+</Solution>

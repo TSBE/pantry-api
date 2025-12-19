@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
@@ -29,12 +30,11 @@ public class StorageLocationController : ControllerBase
     /// Get storage location.
     /// </summary>
     /// <returns>returns logged in users storage location.</returns>
-    [HttpGet("{storageLocationId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StorageLocationResponse))]
-    public async Task<IActionResult> GetStorageLocationByIdAsync(long storageLocationId)
+    [HttpGet("{storageLocationId:long}")]
+    public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> GetStorageLocationByIdAsync(long storageLocationId)
     {
         StorageLocationResponse storageLocation = (await _queryPublisher.ExecuteAsync(new StorageLocationByIdQuery(storageLocationId))).ToDtoNotNull();
-        return Ok(storageLocation);
+        return TypedResults.Ok(storageLocation);
     }
 
     /// <summary>
@@ -42,11 +42,10 @@ public class StorageLocationController : ControllerBase
     /// </summary>
     /// <returns>List of all storageLocations.</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StorageLocationListResponse))]
-    public async Task<IActionResult> GetAllStorageLocationsAsync()
+    public async Task<Results<Ok<StorageLocationListResponse>, BadRequest>> GetAllStorageLocationsAsync()
     {
         IEnumerable<StorageLocationResponse> storageLocations = (await _queryPublisher.ExecuteAsync(new StorageLocationListQuery())).ToDtos();
-        return Ok(new StorageLocationListResponse { StorageLocations = storageLocations });
+        return TypedResults.Ok(new StorageLocationListResponse { StorageLocations = storageLocations });
     }
 
     /// <summary>
@@ -54,36 +53,31 @@ public class StorageLocationController : ControllerBase
     /// </summary>
     /// <returns>storage location.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StorageLocationResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest)
+    public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> CreateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest)
     {
         StorageLocationResponse storageLocation = (await _commandPublisher.ExecuteAsync(new CreateStorageLocationCommand(storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
-        return Ok(storageLocation);
+        return TypedResults.Ok(storageLocation);
     }
 
     /// <summary>
     /// Update storage location.
     /// </summary>
     /// <returns>storage location.</returns>
-    [HttpPut("{storageLocationId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StorageLocationResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> UpdateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest, long storageLocationId)
+    [HttpPut("{storageLocationId:long}")]
+    public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> UpdateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest, long storageLocationId)
     {
         StorageLocationResponse storageLocation = (await _commandPublisher.ExecuteAsync(new UpdateStorageLocationCommand(storageLocationId, storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
-        return Ok(storageLocation);
+        return TypedResults.Ok(storageLocation);
     }
 
     /// <summary>
     ///  Deletes storage location.
     /// </summary>
     /// <returns>no content.</returns>
-    [HttpDelete("{storageLocationId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> DeleteStorageLocationAsync(long storageLocationId)
+    [HttpDelete("{storageLocationId:long}")]
+    public async Task<Results<NoContent, BadRequest>> DeleteStorageLocationAsync(long storageLocationId)
     {
         await _commandPublisher.ExecuteAsync(new DeleteStorageLocationCommand(storageLocationId));
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

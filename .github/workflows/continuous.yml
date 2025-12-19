@@ -10,16 +10,16 @@ jobs:
     name: build and test
     runs-on: ubuntu-latest
     steps:
-      - name: Setup .NET 9.0.x
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 9.0.x
       - name: Checkout repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
       - name: Restore
         run: dotnet restore
       - name: Build
-        run: dotnet build Pantry.sln --configuration Release --no-restore
+        run: dotnet build Pantry.slnx --configuration Release --no-restore
       - name: Run unit tests
         run: dotnet test ./tests/Pantry.Tests.Component/Pantry.Tests.Component.csproj --configuration Release --no-build --verbosity normal --logger trx --filter "Category=Unit"
       - name: Run integration tests
@@ -37,12 +37,12 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
-      - name: Setup .NET 9.0.x
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 9.0.x
       - name: Checkout repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
       - name: Restore
         run: dotnet restore --runtime linux-musl-x64
       - name: Build

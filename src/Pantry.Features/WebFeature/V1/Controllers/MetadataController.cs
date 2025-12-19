@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Queries;
 using Pantry.Features.WebFeature.V1.Controllers.Extensions;
@@ -24,10 +25,9 @@ public class MetadataController : ControllerBase
     /// </summary>
     /// <returns>returns article metadata.</returns>
     [HttpGet("{barcode}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MetadataResponse))]
-    public async Task<IActionResult> GetMetadataByGtinAsync(string barcode)
+    public async Task<Results<Ok<MetadataResponse>, BadRequest>> GetMetadataByGtinAsync(string barcode)
     {
         MetadataResponse metadata = (await _queryPublisher.ExecuteAsync(new MetadataByGtinQuery(barcode))).ToDtoNotNull();
-        return Ok(metadata);
+        return TypedResults.Ok(metadata);
     }
 }

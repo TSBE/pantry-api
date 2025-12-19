@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
@@ -29,11 +30,10 @@ public class HouseholdController : ControllerBase
     /// </summary>
     /// <returns>returns logged in users household.</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HouseholdResponse))]
-    public async Task<IActionResult> GetHouseholdAsync()
+    public async Task<Results<Ok<HouseholdResponse>, BadRequest>> GetHouseholdAsync()
     {
         HouseholdResponse household = (await _queryPublisher.ExecuteAsync(new HouseholdQuery())).ToDtoNotNull();
-        return Ok(household);
+        return TypedResults.Ok(household);
     }
 
     /// <summary>
@@ -41,11 +41,9 @@ public class HouseholdController : ControllerBase
     /// </summary>
     /// <returns>household.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HouseholdResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateHouseholdAsync([FromBody] HouseholdRequest householdRequest)
+    public async Task<Results<Ok<HouseholdResponse>, BadRequest>> CreateHouseholdAsync([FromBody] HouseholdRequest householdRequest)
     {
         HouseholdResponse household = (await _commandPublisher.ExecuteAsync(new CreateHouseholdCommand(householdRequest.Name, householdRequest.SubscriptionType.ToModelNotNull()))).ToDtoNotNull();
-        return Ok(household);
+        return TypedResults.Ok(household);
     }
 }

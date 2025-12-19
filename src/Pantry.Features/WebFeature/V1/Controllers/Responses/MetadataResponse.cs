@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pantry.Features.WebFeature.V1.Controllers.Responses;
 
 /// <summary>
 /// Represents article metadata.
 /// </summary>
+[SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "This is a external api field")]
 public class MetadataResponse
 {
     /// <summary>
