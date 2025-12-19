@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Pantry.Common.Diagnostics.HealthChecks;
 
-internal class JsonResponseWriter
+internal sealed class JsonResponseWriter
 {
     private readonly bool _includeDetailsInResponse;
 

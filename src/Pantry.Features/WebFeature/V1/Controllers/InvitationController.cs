@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
@@ -31,11 +32,10 @@ public class InvitationController : ControllerBase
     /// </summary>
     /// <returns>returns invitation.</returns>
     [HttpGet("my")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvitationResponse))]
-    public async Task<IActionResult> GetInvitationAsync()
+    public async Task<Results<Ok<InvitationListResponse>, BadRequest>> GetInvitationAsync()
     {
         IEnumerable<InvitationResponse> invitations = (await _queryPublisher.ExecuteAsync(new InvitationListQuery())).ToDtos();
-        return Ok(new InvitationListResponse { Invitations = invitations });
+        return TypedResults.Ok(new InvitationListResponse { Invitations = invitations });
     }
 
     /// <summary>
@@ -43,37 +43,31 @@ public class InvitationController : ControllerBase
     /// </summary>
     /// <returns>invitation.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvitationResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateInvitationAsync([FromBody] InvitationRequest invitationRequest)
+    public async Task<Results<Ok<InvitationResponse>, BadRequest>> CreateInvitationAsync([FromBody] InvitationRequest invitationRequest)
     {
         InvitationResponse invitation = (await _commandPublisher.ExecuteAsync(new CreateInvitationCommand(invitationRequest.FriendsCode))).ToDtoNotNull();
-        return Ok(invitation);
+        return TypedResults.Ok(invitation);
     }
 
     /// <summary>
     /// Accept the Invitation.
     /// </summary>
     /// <returns>no content.</returns>
-    [HttpPost("{friendsCode}/accept")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> AcceptInvitationAsync(Guid friendsCode)
+    [HttpPost("{friendsCode:guid}/accept")]
+    public async Task<Results<NoContent, BadRequest>> AcceptInvitationAsync(Guid friendsCode)
     {
         await _commandPublisher.ExecuteAsync(new AcceptInvitationCommand(friendsCode));
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     /// <summary>
     /// Decline the Invitation.
     /// </summary>
     /// <returns>no content.</returns>
-    [HttpPost("{friendsCode}/decline")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> DeclineInvitationAsync(Guid friendsCode)
+    [HttpPost("{friendsCode:guid}/decline")]
+    public async Task<Results<NoContent, BadRequest>> DeclineInvitationAsync(Guid friendsCode)
     {
         await _commandPublisher.ExecuteAsync(new DeclineInvitationCommand(friendsCode));
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

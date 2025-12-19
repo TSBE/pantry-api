@@ -93,6 +93,10 @@ internal class Startup
             o.ExceptionMapper<Exception, ProblemDetailsExceptionMapper<Exception>>();
         });
 
+        services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerGenConfiguration>();
         services.AddApiVersioning();
         services.AddVersionedApiExplorer(options =>
@@ -137,11 +141,9 @@ internal class Startup
         else
         {
             // migrate any database changes on startup (includes initial db creation)
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.Migrate();
-            }
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
         }
 
         // Required. Writes common Runtime and Environment Info to the log.
@@ -161,7 +163,6 @@ internal class Startup
         app.UseAuthentication();
 
         // Allow Swagger ui for anonymous.
-        app.UseStaticFiles();
         app.UseSwagger(
             options =>
             {
@@ -175,7 +176,6 @@ internal class Startup
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
                     uiOptions.SwaggerEndpoint(new Uri($"/api/doc/{description.GroupName}.json", UriKind.Relative).ToString(), description.GroupName);
-                    uiOptions.InjectStylesheet("/swagger-ui/dark.css");
                 }
             });
 
@@ -187,7 +187,7 @@ internal class Startup
             // Add the backdoor middleware in between the Authentication and Authorization ones
             app.UseBackdoorAuthentication(
                 "auth0|backdoor1234567890",
-                claimsProvider: userId => { return new List<Claim> { new Claim(CustomClaimTypes.HOUSEHOLDID, "1") }; });
+                claimsProvider: userId => new List<Claim> { new Claim(CustomClaimTypes.HOUSEHOLDID, "1") });
         }
 
         app.UseAuthorization();

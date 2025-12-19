@@ -1,4 +1,5 @@
-﻿using Pantry.Core.Models.EanSearchOrg;
+﻿using System.Diagnostics.CodeAnalysis;
+using Pantry.Core.Models.EanSearchOrg;
 using Pantry.Core.Models.OpenFoodFacts;
 
 namespace Pantry.Core.Persistence.Entities;
@@ -6,6 +7,7 @@ namespace Pantry.Core.Persistence.Entities;
 /// <summary>
 /// Represents an metadata.
 /// </summary>
+[SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "This is a external api field")]
 public class Metadata : Auditable
 {
     /// <summary>
@@ -16,7 +18,7 @@ public class Metadata : Auditable
     /// <summary>
     /// The Global Trade Item Number (GTIN) a.k.a. (EAN) of the article.
     /// </summary>
-    required public string GlobalTradeItemNumber { get; set; }
+    public required string GlobalTradeItemNumber { get; set; }
 
     /// <summary>
     /// JSON food facts data.

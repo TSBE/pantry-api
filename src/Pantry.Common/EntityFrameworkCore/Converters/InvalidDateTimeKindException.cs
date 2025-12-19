@@ -34,15 +34,4 @@ public class InvalidDateTimeKindException : Exception
         : base(message, innerException)
     {
     }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="InvalidDateTimeKindException" /> class.
-    /// </summary>
-    /// <param name="serializationInfo">The serializationInfo.</param>
-    /// <param name="streamingContext">The streamingContext.</param>
-    protected InvalidDateTimeKindException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        : base(serializationInfo, streamingContext)
-    {
-        throw new NotImplementedException();
-    }
 }

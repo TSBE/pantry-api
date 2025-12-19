@@ -16,9 +16,10 @@ public static class LoggingExtensions
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Better readability.")]
     public static void LogRuntimeAndEnvironmentInformation(this ILogger logger)
     {
-        if (logger == null)
+        ArgumentNullException.ThrowIfNull(logger);
+        if (!logger.IsEnabled(LogLevel.Information))
         {
-            throw new ArgumentNullException(nameof(logger));
+            return;
         }
 
         ThreadPool.GetMinThreads(out var minWorkerThreads, out var minIoThreads);

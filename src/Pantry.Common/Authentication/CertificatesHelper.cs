@@ -29,14 +29,14 @@ internal static class CertificatesHelper
 
         if (!string.IsNullOrEmpty(password))
         {
-            collection.Import(
+            collection.AddRange(X509CertificateLoader.LoadPkcs12Collection(
                 certificateRawContent,
                 password,
-                X509KeyStorageFlags.PersistKeySet);
+                X509KeyStorageFlags.PersistKeySet));
         }
         else
         {
-            collection.Import(certificateRawContent);
+            collection.Add(X509CertificateLoader.LoadCertificate(certificateRawContent));
         }
 
         return collection;

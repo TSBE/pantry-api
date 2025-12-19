@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
@@ -31,23 +32,21 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <returns>List of all devices.</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceListResponse))]
-    public async Task<IActionResult> GetAllDevicesAsync()
+    public async Task<Results<Ok<DeviceListResponse>, BadRequest>> GetAllDevicesAsync()
     {
         IEnumerable<DeviceResponse> devices = (await _queryPublisher.ExecuteAsync(new DeviceListQuery())).ToDtos();
-        return Ok(new DeviceListResponse { Devices = devices });
+        return TypedResults.Ok(new DeviceListResponse { Devices = devices });
     }
 
     /// <summary>
     /// Gets device by installationId.
     /// </summary>
     /// <returns>List of all devices.</returns>
-    [HttpGet("{installationId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
-    public async Task<IActionResult> GetDeviceByIdAsync(Guid installationId)
+    [HttpGet("{installationId:guid}")]
+    public async Task<Results<Ok<DeviceResponse>, BadRequest>> GetDeviceByIdAsync(Guid installationId)
     {
         DeviceResponse device = (await _queryPublisher.ExecuteAsync(new DeviceByIdQuery(installationId))).ToDtoNotNull();
-        return Ok(device);
+        return TypedResults.Ok(device);
     }
 
     /// <summary>
@@ -55,9 +54,7 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <returns>device.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateDeviceAsync([FromBody] DeviceRequest deviceRequest)
+    public async Task<Results<Ok<DeviceResponse>, BadRequest>> CreateDeviceAsync([FromBody] DeviceRequest deviceRequest)
     {
         DeviceResponse device = (await _commandPublisher.ExecuteAsync(
             new CreateDeviceCommand(
@@ -67,32 +64,28 @@ public class DeviceController : ControllerBase
                 deviceRequest.Platform.ToModelNotNull(),
                 deviceRequest.DeviceToken))).ToDtoNotNull();
 
-        return Ok(device);
+        return TypedResults.Ok(device);
     }
 
     /// <summary>
     /// Update device.
     /// </summary>
     /// <returns>device.</returns>
-    [HttpPut("{installationId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> UpdateDeviceAsync([FromBody] DeviceUpdateRequest deviceUpdateRequest, Guid installationId)
+    [HttpPut("{installationId:guid}")]
+    public async Task<Results<Ok<DeviceResponse>, BadRequest>> UpdateDeviceAsync([FromBody] DeviceUpdateRequest deviceUpdateRequest, Guid installationId)
     {
         DeviceResponse device = (await _commandPublisher.ExecuteAsync(new UpdateDeviceCommand(installationId, deviceUpdateRequest.Name, deviceUpdateRequest.DeviceToken))).ToDtoNotNull();
-        return Ok(device);
+        return TypedResults.Ok(device);
     }
 
     /// <summary>
     /// Delete device.
     /// </summary>
     /// <returns>no content.</returns>
-    [HttpDelete("{installationId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> DeleteDeviceAsync(Guid installationId)
+    [HttpDelete("{installationId:guid}")]
+    public async Task<Results<NoContent, BadRequest>> DeleteDeviceAsync(Guid installationId)
     {
         await _commandPublisher.ExecuteAsync(new DeleteDeviceCommand(installationId));
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Queries;
@@ -29,11 +30,10 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <returns>returns logged in users account.</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountResponse))]
-    public async Task<IActionResult> GetAccountAsync()
+    public async Task<Results<Ok<AccountResponse>, NotFound>> GetAccountAsync()
     {
         AccountResponse account = (await _queryPublisher.ExecuteAsync(new AccountQuery())).ToDtoNotNull();
-        return Ok(account);
+        return TypedResults.Ok(account);
     }
 
     /// <summary>
@@ -41,12 +41,10 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <returns>account.</returns>
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> CreateAccountAsync([FromBody] AccountRequest accountRequest)
+    public async Task<Results<Ok<AccountResponse>, BadRequest>> CreateAccountAsync([FromBody] AccountRequest accountRequest)
     {
         AccountResponse account = (await _commandPublisher.ExecuteAsync(new CreateAccountCommand(accountRequest.FirstName, accountRequest.LastName))).ToDtoNotNull();
-        return Ok(account);
+        return TypedResults.Ok(account);
     }
 
     /// <summary>
@@ -54,10 +52,9 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <returns>no content.</returns>
     [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> DeleteAccountAsync()
+    public async Task<Results<NoContent, BadRequest>> DeleteAccountAsync()
     {
         await _commandPublisher.ExecuteAsync(new DeleteAccountCommand());
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

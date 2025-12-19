@@ -7,6 +7,8 @@ namespace Pantry.Common.Authentication;
 
 public static class ClaimsPrincipalHelper
 {
+    private static readonly char[] Separator = [' ', ','];
+
     public static string? GetClientId(this IPrincipal principal)
         => principal.GetClaim(CustomClaimTypes.CLIENTIDENTIFIER);
 
@@ -23,7 +25,7 @@ public static class ClaimsPrincipalHelper
         => principal.GetClaim(CustomClaimTypes.ISSUER);
 
     public static string[]? GetScopes(this IPrincipal principal)
-        => principal.GetClaim(CustomClaimTypes.SCOPES)?.Split(new[] { ' ', ',' });
+        => principal.GetClaim(CustomClaimTypes.SCOPES)?.Split(Separator);
 
     public static string? GetAuth0Id(this IPrincipal principal)
         => principal.Identity?.GetAuth0Id();

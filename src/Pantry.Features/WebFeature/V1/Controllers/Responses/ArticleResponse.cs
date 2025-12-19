@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Pantry.Features.WebFeature.V1.Controllers.Enums;
 
 namespace Pantry.Features.WebFeature.V1.Controllers.Responses;
@@ -8,6 +9,7 @@ namespace Pantry.Features.WebFeature.V1.Controllers.Responses;
 /// <summary>
 /// Represents article.
 /// </summary>
+[SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "This is a external api field")]
 public class ArticleResponse
 {
     /// <summary>
