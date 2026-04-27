@@ -15,14 +15,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class AccountController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public AccountController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public AccountController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -32,7 +29,7 @@ public class AccountController : ControllerBase
     [HttpGet]
     public async Task<Results<Ok<AccountResponse>, NotFound>> GetAccountAsync()
     {
-        AccountResponse account = (await _queryPublisher.ExecuteAsync(new AccountQuery())).ToDtoNotNull();
+        AccountResponse account = (await _publisher.ExecuteQueryAsync(new AccountQuery())).ToDtoNotNull();
         return TypedResults.Ok(account);
     }
 
@@ -43,7 +40,7 @@ public class AccountController : ControllerBase
     [HttpPut]
     public async Task<Results<Ok<AccountResponse>, BadRequest>> CreateAccountAsync([FromBody] AccountRequest accountRequest)
     {
-        AccountResponse account = (await _commandPublisher.ExecuteAsync(new CreateAccountCommand(accountRequest.FirstName, accountRequest.LastName))).ToDtoNotNull();
+        AccountResponse account = (await _publisher.ExecuteCommandAsync(new CreateAccountCommand(accountRequest.FirstName, accountRequest.LastName))).ToDtoNotNull();
         return TypedResults.Ok(account);
     }
 
@@ -54,7 +51,7 @@ public class AccountController : ControllerBase
     [HttpDelete]
     public async Task<Results<NoContent, BadRequest>> DeleteAccountAsync()
     {
-        await _commandPublisher.ExecuteAsync(new DeleteAccountCommand());
+        await _publisher.ExecuteCommandAsync(new DeleteAccountCommand());
         return TypedResults.NoContent();
     }
 }

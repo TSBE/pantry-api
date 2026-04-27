@@ -17,14 +17,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class DeviceController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public DeviceController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public DeviceController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -34,7 +31,7 @@ public class DeviceController : ControllerBase
     [HttpGet]
     public async Task<Results<Ok<DeviceListResponse>, BadRequest>> GetAllDevicesAsync()
     {
-        IEnumerable<DeviceResponse> devices = (await _queryPublisher.ExecuteAsync(new DeviceListQuery())).ToDtos();
+        IEnumerable<DeviceResponse> devices = (await _publisher.ExecuteQueryAsync(new DeviceListQuery())).ToDtos();
         return TypedResults.Ok(new DeviceListResponse { Devices = devices });
     }
 
@@ -45,7 +42,7 @@ public class DeviceController : ControllerBase
     [HttpGet("{installationId:guid}")]
     public async Task<Results<Ok<DeviceResponse>, BadRequest>> GetDeviceByIdAsync(Guid installationId)
     {
-        DeviceResponse device = (await _queryPublisher.ExecuteAsync(new DeviceByIdQuery(installationId))).ToDtoNotNull();
+        DeviceResponse device = (await _publisher.ExecuteQueryAsync(new DeviceByIdQuery(installationId))).ToDtoNotNull();
         return TypedResults.Ok(device);
     }
 
@@ -56,7 +53,7 @@ public class DeviceController : ControllerBase
     [HttpPost]
     public async Task<Results<Ok<DeviceResponse>, BadRequest>> CreateDeviceAsync([FromBody] DeviceRequest deviceRequest)
     {
-        DeviceResponse device = (await _commandPublisher.ExecuteAsync(
+        DeviceResponse device = (await _publisher.ExecuteCommandAsync(
             new CreateDeviceCommand(
                 deviceRequest.InstallationId,
                 deviceRequest.Model,
@@ -74,7 +71,7 @@ public class DeviceController : ControllerBase
     [HttpPut("{installationId:guid}")]
     public async Task<Results<Ok<DeviceResponse>, BadRequest>> UpdateDeviceAsync([FromBody] DeviceUpdateRequest deviceUpdateRequest, Guid installationId)
     {
-        DeviceResponse device = (await _commandPublisher.ExecuteAsync(new UpdateDeviceCommand(installationId, deviceUpdateRequest.Name, deviceUpdateRequest.DeviceToken))).ToDtoNotNull();
+        DeviceResponse device = (await _publisher.ExecuteCommandAsync(new UpdateDeviceCommand(installationId, deviceUpdateRequest.Name, deviceUpdateRequest.DeviceToken))).ToDtoNotNull();
         return TypedResults.Ok(device);
     }
 
@@ -85,7 +82,7 @@ public class DeviceController : ControllerBase
     [HttpDelete("{installationId:guid}")]
     public async Task<Results<NoContent, BadRequest>> DeleteDeviceAsync(Guid installationId)
     {
-        await _commandPublisher.ExecuteAsync(new DeleteDeviceCommand(installationId));
+        await _publisher.ExecuteCommandAsync(new DeleteDeviceCommand(installationId));
         return TypedResults.NoContent();
     }
 }

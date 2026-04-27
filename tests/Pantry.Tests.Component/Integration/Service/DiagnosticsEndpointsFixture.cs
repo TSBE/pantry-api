@@ -22,7 +22,7 @@ public class DiagnosticsEndpointsFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        HttpResponseMessage response = await httpClient.GetAsync(endpoint);
+        HttpResponseMessage response = await httpClient.GetAsync(endpoint, TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

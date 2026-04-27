@@ -29,7 +29,7 @@ public class MetadataControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.Name.ShouldBe(metadata.FoodFacts.ProductName);
@@ -53,7 +53,7 @@ public class MetadataControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<MetadataResponse>($"api/v1/metadatas/{metadata.GlobalTradeItemNumber}", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.Name.ShouldBe(metadata.ProductFacts.Name);
