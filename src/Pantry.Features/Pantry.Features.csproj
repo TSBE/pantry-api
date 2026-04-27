@@ -1,29 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-   <PropertyGroup>
-      <TargetFramework>net10.0</TargetFramework>
-   </PropertyGroup>
-
-   <ItemGroup>
-      <PackageReference Include="FluentValidation" Version="12.1.1" />
-      <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-      <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
-      <PackageReference Include="Opw.HttpExceptions" Version="4.0.3" />
-      <PackageReference Include="Refit" Version="10.1.6" />
-      <PackageReference Include="Refit.HttpClientFactory" Version="10.1.6" />
-      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.9" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.7" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.7" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.9" />
-      <PackageReference Include="Silverback.Integration" Version="5.3.0" />
-      <PackageReference Include="Silverback.Core" Version="5.3.0" />
-   </ItemGroup>
-
-   <ItemGroup>
-      <ProjectReference Include="..\Pantry.Core\Pantry.Core.csproj" />
-   </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
+    <PackageReference Include="Opw.HttpExceptions" />
+    <PackageReference Include="Refit" />
+    <PackageReference Include="Refit.HttpClientFactory" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" />
+    <PackageReference Include="Silverback.Integration" />
+    <PackageReference Include="Silverback.Core" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pantry.Core\Pantry.Core.csproj" />
+  </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ public class DeviceControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<DeviceListResponse>("api/v1/devices", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<DeviceListResponse>("api/v1/devices", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.Devices?.Count().ShouldBe(2);
@@ -57,7 +57,7 @@ public class DeviceControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<DeviceResponse>($"api/v1/devices/{device1.InstallationId}", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<DeviceResponse>($"api/v1/devices/{device1.InstallationId}", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.InstallationId.ShouldBe(device1.InstallationId);
@@ -85,7 +85,7 @@ public class DeviceControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/devices", expectedDeviceeRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/devices", expectedDeviceeRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -123,7 +123,7 @@ public class DeviceControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync($"api/v1/devices/{device.InstallationId}", expectedDeviceeRequest);
+        var response = await httpClient.PutAsJsonAsync($"api/v1/devices/{device.InstallationId}", expectedDeviceeRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -158,7 +158,7 @@ public class DeviceControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.DeleteAsync($"api/v1/devices/{device1.InstallationId}");
+        var response = await httpClient.DeleteAsync($"api/v1/devices/{device1.InstallationId}", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();

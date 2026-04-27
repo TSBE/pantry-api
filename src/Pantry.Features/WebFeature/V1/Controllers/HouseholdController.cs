@@ -15,14 +15,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class HouseholdController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public HouseholdController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public HouseholdController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -32,7 +29,7 @@ public class HouseholdController : ControllerBase
     [HttpGet]
     public async Task<Results<Ok<HouseholdResponse>, BadRequest>> GetHouseholdAsync()
     {
-        HouseholdResponse household = (await _queryPublisher.ExecuteAsync(new HouseholdQuery())).ToDtoNotNull();
+        HouseholdResponse household = (await _publisher.ExecuteQueryAsync(new HouseholdQuery())).ToDtoNotNull();
         return TypedResults.Ok(household);
     }
 
@@ -43,7 +40,7 @@ public class HouseholdController : ControllerBase
     [HttpPost]
     public async Task<Results<Ok<HouseholdResponse>, BadRequest>> CreateHouseholdAsync([FromBody] HouseholdRequest householdRequest)
     {
-        HouseholdResponse household = (await _commandPublisher.ExecuteAsync(new CreateHouseholdCommand(householdRequest.Name, householdRequest.SubscriptionType.ToModelNotNull()))).ToDtoNotNull();
+        HouseholdResponse household = (await _publisher.ExecuteCommandAsync(new CreateHouseholdCommand(householdRequest.Name, householdRequest.SubscriptionType.ToModelNotNull()))).ToDtoNotNull();
         return TypedResults.Ok(household);
     }
 }

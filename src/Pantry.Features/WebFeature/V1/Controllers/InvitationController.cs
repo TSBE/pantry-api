@@ -17,14 +17,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class InvitationController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public InvitationController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public InvitationController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -34,7 +31,7 @@ public class InvitationController : ControllerBase
     [HttpGet("my")]
     public async Task<Results<Ok<InvitationListResponse>, BadRequest>> GetInvitationAsync()
     {
-        IEnumerable<InvitationResponse> invitations = (await _queryPublisher.ExecuteAsync(new InvitationListQuery())).ToDtos();
+        IEnumerable<InvitationResponse> invitations = (await _publisher.ExecuteQueryAsync(new InvitationListQuery())).ToDtos();
         return TypedResults.Ok(new InvitationListResponse { Invitations = invitations });
     }
 
@@ -45,7 +42,7 @@ public class InvitationController : ControllerBase
     [HttpPost]
     public async Task<Results<Ok<InvitationResponse>, BadRequest>> CreateInvitationAsync([FromBody] InvitationRequest invitationRequest)
     {
-        InvitationResponse invitation = (await _commandPublisher.ExecuteAsync(new CreateInvitationCommand(invitationRequest.FriendsCode))).ToDtoNotNull();
+        InvitationResponse invitation = (await _publisher.ExecuteCommandAsync(new CreateInvitationCommand(invitationRequest.FriendsCode))).ToDtoNotNull();
         return TypedResults.Ok(invitation);
     }
 
@@ -56,7 +53,7 @@ public class InvitationController : ControllerBase
     [HttpPost("{friendsCode:guid}/accept")]
     public async Task<Results<NoContent, BadRequest>> AcceptInvitationAsync(Guid friendsCode)
     {
-        await _commandPublisher.ExecuteAsync(new AcceptInvitationCommand(friendsCode));
+        await _publisher.ExecuteCommandAsync(new AcceptInvitationCommand(friendsCode));
         return TypedResults.NoContent();
     }
 
@@ -67,7 +64,7 @@ public class InvitationController : ControllerBase
     [HttpPost("{friendsCode:guid}/decline")]
     public async Task<Results<NoContent, BadRequest>> DeclineInvitationAsync(Guid friendsCode)
     {
-        await _commandPublisher.ExecuteAsync(new DeclineInvitationCommand(friendsCode));
+        await _publisher.ExecuteCommandAsync(new DeclineInvitationCommand(friendsCode));
         return TypedResults.NoContent();
     }
 }

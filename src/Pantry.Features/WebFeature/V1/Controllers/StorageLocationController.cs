@@ -16,14 +16,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class StorageLocationController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public StorageLocationController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public StorageLocationController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -33,7 +30,7 @@ public class StorageLocationController : ControllerBase
     [HttpGet("{storageLocationId:long}")]
     public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> GetStorageLocationByIdAsync(long storageLocationId)
     {
-        StorageLocationResponse storageLocation = (await _queryPublisher.ExecuteAsync(new StorageLocationByIdQuery(storageLocationId))).ToDtoNotNull();
+        StorageLocationResponse storageLocation = (await _publisher.ExecuteQueryAsync(new StorageLocationByIdQuery(storageLocationId))).ToDtoNotNull();
         return TypedResults.Ok(storageLocation);
     }
 
@@ -44,7 +41,7 @@ public class StorageLocationController : ControllerBase
     [HttpGet]
     public async Task<Results<Ok<StorageLocationListResponse>, BadRequest>> GetAllStorageLocationsAsync()
     {
-        IEnumerable<StorageLocationResponse> storageLocations = (await _queryPublisher.ExecuteAsync(new StorageLocationListQuery())).ToDtos();
+        IEnumerable<StorageLocationResponse> storageLocations = (await _publisher.ExecuteQueryAsync(new StorageLocationListQuery())).ToDtos();
         return TypedResults.Ok(new StorageLocationListResponse { StorageLocations = storageLocations });
     }
 
@@ -55,7 +52,7 @@ public class StorageLocationController : ControllerBase
     [HttpPost]
     public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> CreateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest)
     {
-        StorageLocationResponse storageLocation = (await _commandPublisher.ExecuteAsync(new CreateStorageLocationCommand(storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
+        StorageLocationResponse storageLocation = (await _publisher.ExecuteCommandAsync(new CreateStorageLocationCommand(storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
         return TypedResults.Ok(storageLocation);
     }
 
@@ -66,7 +63,7 @@ public class StorageLocationController : ControllerBase
     [HttpPut("{storageLocationId:long}")]
     public async Task<Results<Ok<StorageLocationResponse>, BadRequest>> UpdateStorageLocationAsync([FromBody] StorageLocationRequest storageLocationRequest, long storageLocationId)
     {
-        StorageLocationResponse storageLocation = (await _commandPublisher.ExecuteAsync(new UpdateStorageLocationCommand(storageLocationId, storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
+        StorageLocationResponse storageLocation = (await _publisher.ExecuteCommandAsync(new UpdateStorageLocationCommand(storageLocationId, storageLocationRequest.Name, storageLocationRequest.Description))).ToDtoNotNull();
         return TypedResults.Ok(storageLocation);
     }
 
@@ -77,7 +74,7 @@ public class StorageLocationController : ControllerBase
     [HttpDelete("{storageLocationId:long}")]
     public async Task<Results<NoContent, BadRequest>> DeleteStorageLocationAsync(long storageLocationId)
     {
-        await _commandPublisher.ExecuteAsync(new DeleteStorageLocationCommand(storageLocationId));
+        await _publisher.ExecuteCommandAsync(new DeleteStorageLocationCommand(storageLocationId));
         return TypedResults.NoContent();
     }
 }

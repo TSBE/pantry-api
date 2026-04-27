@@ -33,7 +33,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/households/my", expectedHouseholdRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/households/my", expectedHouseholdRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -69,7 +69,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/households/my", expectedHouseholdRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/households/my", expectedHouseholdRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
@@ -99,7 +99,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<HouseholdResponse>("api/v1/households/my", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<HouseholdResponse>("api/v1/households/my", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response.ShouldNotBeNull();
@@ -127,7 +127,7 @@ public class HouseholdControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetAsync("api/v1/households/my");
+        var response = await httpClient.GetAsync("api/v1/households/my", TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NotFound);

@@ -16,7 +16,7 @@ public class SwaggerFixture
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(_testOutputHelper);
         using HttpClient httpClient = testApplication.CreateClient();
 
-        HttpResponseMessage response = await httpClient.GetAsync("api/doc/ui/index.html");
+        HttpResponseMessage response = await httpClient.GetAsync("api/doc/ui/index.html", TestContext.Current.CancellationToken);
 
         response.ShouldNotBeNull();
         response.IsSuccessStatusCode.ShouldBeTrue();
@@ -28,7 +28,7 @@ public class SwaggerFixture
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(_testOutputHelper);
         using HttpClient client = testApplication.CreateClient();
 
-        HttpResponseMessage response = await client.GetAsync("api/doc/v1.json");
+        HttpResponseMessage response = await client.GetAsync("api/doc/v1.json", TestContext.Current.CancellationToken);
 
         response.ShouldNotBeNull();
         response.IsSuccessStatusCode.ShouldBeTrue();

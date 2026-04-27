@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Pantry.Core.Persistence;
 using Pantry.Service;
+using Silverback.Configuration;
 
 namespace Pantry.Tests.Component.Integration.Environment;
 
@@ -29,13 +30,12 @@ internal sealed class IntegrationTestWebApplicationFactory : IntegrationTestWebA
     {
         base.ConfigureWebHost(builder);
 
-        builder.ConfigureServices(
-            services =>
-            {
-                services.OverrideWithSharedInMemorySqliteDatabase<AppDbContext>();
-                services.ConfigureSilverback();
+        builder.ConfigureServices(services =>
+        {
+            services.OverrideWithSharedInMemorySqliteDatabase<AppDbContext>();
+            services.ConfigureSilverback();
 
-                _servicesConfigAction?.Invoke(services);
-            });
+            _servicesConfigAction?.Invoke(services);
+        });
     }
 }

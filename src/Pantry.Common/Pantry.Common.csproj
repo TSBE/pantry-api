@@ -1,22 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-   <PropertyGroup>
-      <TargetFramework>net10.0</TargetFramework>
-      <ImplicitUsings>enable</ImplicitUsings>
-      <Nullable>enable</Nullable>
-   </PropertyGroup>
-
-   <ItemGroup>
-      <FrameworkReference Include="Microsoft.AspNetCore.App" />
-   </ItemGroup>
-
-   <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
-      <PackageReference Include="Opw.HttpExceptions" Version="4.0.3" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.7" />
-   </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Opw.HttpExceptions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+  </ItemGroup>
 </Project>
