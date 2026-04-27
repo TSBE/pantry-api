@@ -38,7 +38,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/invitations", expectedInvitationRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/invitations", expectedInvitationRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -83,7 +83,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/invitations", expectedInvitationRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/invitations", expectedInvitationRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
@@ -122,7 +122,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<InvitationListResponse>("api/v1/invitations/my");
+        var response = await httpClient.GetFromJsonAsync<InvitationListResponse>("api/v1/invitations/my", TestContext.Current.CancellationToken);
 
         // Assert
         response.ShouldNotBeNull();
@@ -166,7 +166,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/accept", null);
+        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/accept", null, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -201,7 +201,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/accept", null);
+        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/accept", null, TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
@@ -235,7 +235,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/decline", null);
+        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/decline", null, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -270,7 +270,7 @@ public class InvitationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/decline", null);
+        var response = await httpClient.PostAsync($"api/v1/invitations/{AccountJohnDoe.FriendsCode}/decline", null, TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NoContent);

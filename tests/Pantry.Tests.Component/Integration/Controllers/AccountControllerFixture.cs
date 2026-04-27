@@ -27,7 +27,7 @@ public class AccountControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync("api/v1/accounts/me", expectedAccountRequest);
+        var response = await httpClient.PutAsJsonAsync("api/v1/accounts/me", expectedAccountRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -62,7 +62,7 @@ public class AccountControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync("api/v1/accounts/me", expectedAccountRequest);
+        var response = await httpClient.PutAsJsonAsync("api/v1/accounts/me", expectedAccountRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -91,7 +91,7 @@ public class AccountControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<AccountResponse>("api/v1/accounts/me");
+        var response = await httpClient.GetFromJsonAsync<AccountResponse>("api/v1/accounts/me", TestContext.Current.CancellationToken);
 
         // Assert
         response.ShouldNotBeNull();
@@ -115,7 +115,7 @@ public class AccountControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetAsync("api/v1/accounts/me");
+        var response = await httpClient.GetAsync("api/v1/accounts/me", TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NotFound);
@@ -140,7 +140,7 @@ public class AccountControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.DeleteAsync("api/v1/accounts/me");
+        var response = await httpClient.DeleteAsync("api/v1/accounts/me", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -161,7 +161,7 @@ public class AccountControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.DeleteAsync("api/v1/accounts/me");
+        var response = await httpClient.DeleteAsync("api/v1/accounts/me", TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NotFound);

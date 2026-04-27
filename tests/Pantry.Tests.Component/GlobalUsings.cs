@@ -11,4 +11,3 @@ global using Pantry.Tests.EntityFrameworkCore.Extensions;
 global using Pantry.Tests.EntityFrameworkCore.Persistence;
 global using Shouldly;
 global using Xunit;
-global using Xunit.Abstractions;

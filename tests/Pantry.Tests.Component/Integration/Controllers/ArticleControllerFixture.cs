@@ -56,7 +56,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<ArticleListResponse>("api/v1/articles", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<ArticleListResponse>("api/v1/articles", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         var articleResponses = response!.Articles;
@@ -109,7 +109,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<ArticleResponse>($"api/v1/articles/{article1.ArticleId}", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<ArticleResponse>($"api/v1/articles/{article1.ArticleId}", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.BestBeforeDate.ShouldBe(article1.BestBeforeDate);
@@ -149,7 +149,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/articles", expectedArticleRequest, JsonSerializerOptions);
+        var response = await httpClient.PostAsJsonAsync("api/v1/articles", expectedArticleRequest, JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -209,8 +209,8 @@ public class ArticleControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync($"api/v1/articles/{article.ArticleId}", expectedArticleRequest);
-        await response.Content.ReadAsStringAsync();
+        var response = await httpClient.PutAsJsonAsync($"api/v1/articles/{article.ArticleId}", expectedArticleRequest, TestContext.Current.CancellationToken);
+        await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -272,7 +272,7 @@ public class ArticleControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.DeleteAsync($"api/v1/articles/{article1.ArticleId}");
+        var response = await httpClient.DeleteAsync($"api/v1/articles/{article1.ArticleId}", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();

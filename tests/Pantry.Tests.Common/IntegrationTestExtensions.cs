@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Net.Http;
+﻿using System.Globalization;
 using Pantry.Common.Time;
 
 namespace Pantry.Tests.Common;
