@@ -8,7 +8,7 @@ using Pantry.Features.WebFeature.Commands;
 using Pantry.Features.WebFeature.Configuration;
 using Pantry.Features.WebFeature.Queries;
 using Pantry.Features.WebFeature.V1.Controllers;
-using Silverback.Messaging.Configuration;
+using Silverback.Configuration;
 
 namespace Pantry.Features.WebFeature;
 
@@ -34,7 +34,7 @@ public static class Registrar
         services.Configure<WebFeatureConfiguration>(configuration.GetRequiredSection(WebFeatureConfiguration.Name));
         services.AddTransient<IClaimsTransformation, HouseholdClaimsTransformation>();
 
-        ISilverbackBuilder silverbackBuilder = services.ConfigureSilverback();
+        SilverbackBuilder silverbackBuilder = services.ConfigureSilverback();
 
         // CommandHandlers
         silverbackBuilder

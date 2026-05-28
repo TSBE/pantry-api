@@ -32,7 +32,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<StorageLocationListResponse>("api/v1/storage-locations", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<StorageLocationListResponse>("api/v1/storage-locations", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.StorageLocations?.Count().ShouldBe(2);
@@ -58,7 +58,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.GetFromJsonAsync<StorageLocationResponse>($"api/v1/storage-locations/{storageLocation1.StorageLocationId}", JsonSerializerOptions);
+        var response = await httpClient.GetFromJsonAsync<StorageLocationResponse>($"api/v1/storage-locations/{storageLocation1.StorageLocationId}", JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Assert
         response!.Id.ShouldBe(storageLocation1.StorageLocationId);
@@ -69,12 +69,11 @@ public class StorageLocationControllerFixture : BaseControllerFixture
     {
         // Arrange
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        await testApplication.SetupDatabaseAsync<AppDbContext>(
-            dbContext =>
-            {
-                dbContext.Accounts.Add(AccountJohnDoe);
-                dbContext.Households.Add(HouseholdOfJohnDoe);
-            });
+        await testApplication.SetupDatabaseAsync<AppDbContext>(dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Households.Add(HouseholdOfJohnDoe);
+        });
 
         using HttpClient httpClient = testApplication.CreateClient();
 
@@ -85,7 +84,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync("api/v1/storage-locations", expectedStorageLocationRequest);
+        var response = await httpClient.PostAsJsonAsync("api/v1/storage-locations", expectedStorageLocationRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -106,13 +105,12 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         // Arrange
         var storageLocation = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        await testApplication.SetupDatabaseAsync<AppDbContext>(
-            dbContext =>
-            {
-                dbContext.Accounts.Add(AccountJohnDoe);
-                dbContext.Households.Add(HouseholdOfJohnDoe);
-                dbContext.StorageLocations.Add(storageLocation);
-            });
+        await testApplication.SetupDatabaseAsync<AppDbContext>(dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Households.Add(HouseholdOfJohnDoe);
+            dbContext.StorageLocations.Add(storageLocation);
+        });
 
         using HttpClient httpClient = testApplication.CreateClient();
 
@@ -123,7 +121,7 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         };
 
         // Act
-        var response = await httpClient.PutAsJsonAsync($"api/v1/storage-locations/{storageLocation.StorageLocationId}", expectedStorageLocationRequest);
+        var response = await httpClient.PutAsJsonAsync($"api/v1/storage-locations/{storageLocation.StorageLocationId}", expectedStorageLocationRequest, TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -145,19 +143,18 @@ public class StorageLocationControllerFixture : BaseControllerFixture
         var storageLocation1 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 1, Name = "Test Location", Description = "Bar Description" };
         var storageLocation2 = new StorageLocation { Household = HouseholdOfJohnDoe, StorageLocationId = 2, Name = "Unit Location", Description = "Foo Description" };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        await testApplication.SetupDatabaseAsync<AppDbContext>(
-            dbContext =>
-            {
-                dbContext.Accounts.Add(AccountJohnDoe);
-                dbContext.Households.Add(HouseholdOfJohnDoe);
-                dbContext.StorageLocations.Add(storageLocation1);
-                dbContext.StorageLocations.Add(storageLocation2);
-            });
+        await testApplication.SetupDatabaseAsync<AppDbContext>(dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Households.Add(HouseholdOfJohnDoe);
+            dbContext.StorageLocations.Add(storageLocation1);
+            dbContext.StorageLocations.Add(storageLocation2);
+        });
 
         using HttpClient httpClient = testApplication.CreateClient();
 
         // Act
-        var response = await httpClient.DeleteAsync($"api/v1/storage-locations/{storageLocation1.StorageLocationId}");
+        var response = await httpClient.DeleteAsync($"api/v1/storage-locations/{storageLocation1.StorageLocationId}", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();

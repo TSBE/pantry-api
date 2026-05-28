@@ -13,11 +13,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class MetadataController : ControllerBase
 {
-    private readonly IQueryPublisher _queryPublisher;
+    private readonly IPublisher _publisher;
 
-    public MetadataController(IQueryPublisher queryPublisher)
+    public MetadataController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public class MetadataController : ControllerBase
     [HttpGet("{barcode}")]
     public async Task<Results<Ok<MetadataResponse>, BadRequest>> GetMetadataByGtinAsync(string barcode)
     {
-        MetadataResponse metadata = (await _queryPublisher.ExecuteAsync(new MetadataByGtinQuery(barcode))).ToDtoNotNull();
+        MetadataResponse metadata = (await _publisher.ExecuteQueryAsync(new MetadataByGtinQuery(barcode))).ToDtoNotNull();
         return TypedResults.Ok(metadata);
     }
 }

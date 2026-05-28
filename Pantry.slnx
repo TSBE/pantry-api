@@ -2,6 +2,7 @@
   <Folder Name="/Shared/">
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
     <File Path="global.json" />
     <File Path="Global.ruleset" />
     <File Path="GlobalTest.ruleset" />

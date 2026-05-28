@@ -29,6 +29,7 @@ using Pantry.Features.EanSearchOrg;
 using Pantry.Features.OpenFoodFacts;
 using Pantry.Features.WebFeature;
 using Pantry.Service.Infrastructure;
+using Silverback.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Pantry.Service;
@@ -55,8 +56,7 @@ internal class Startup
                 options.Predicate = check => check.Tags.Contains(HealthCheckConstants.Tags.ReadinessTag);
             });
 
-        services.AddSilverback()
-            .UseModel(); // Optional. Enables the CQRS-Part of Silverback.
+        services.AddSilverback();
 
         services.AddControllers(options =>
         {
@@ -69,8 +69,7 @@ internal class Startup
             });
         })
         .AddControllersAsServices()
-        .AddJsonOptions(
-        options =>
+        .AddJsonOptions(options =>
         {
             // Limit excepton message for security reasons.
             options.AllowInputFormatterExceptionMessages = false;
@@ -163,21 +162,19 @@ internal class Startup
         app.UseAuthentication();
 
         // Allow Swagger ui for anonymous.
-        app.UseSwagger(
-            options =>
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "/api/doc/{documentName}.json";
+        });
+        app.UseSwaggerUI(uiOptions =>
+        {
+            uiOptions.EnableTryItOutByDefault();
+            uiOptions.RoutePrefix = "api/doc/ui";
+            foreach (var description in provider.ApiVersionDescriptions)
             {
-                options.RouteTemplate = "/api/doc/{documentName}.json";
-            });
-        app.UseSwaggerUI(
-            uiOptions =>
-            {
-                uiOptions.EnableTryItOutByDefault();
-                uiOptions.RoutePrefix = "api/doc/ui";
-                foreach (var description in provider.ApiVersionDescriptions)
-                {
-                    uiOptions.SwaggerEndpoint(new Uri($"/api/doc/{description.GroupName}.json", UriKind.Relative).ToString(), description.GroupName);
-                }
-            });
+                uiOptions.SwaggerEndpoint(new Uri($"/api/doc/{description.GroupName}.json", UriKind.Relative).ToString(), description.GroupName);
+            }
+        });
 
         if (env.IsDevelopment() || env.IsIntegrationTest())
         {
@@ -192,11 +189,10 @@ internal class Startup
 
         app.UseAuthorization();
 
-        app.UseEndpoints(
-            endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapPantryHealthChecks(true, conventionBuilder => conventionBuilder.WithMetadata(new AllowAnonymousAttribute()));
-            });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapPantryHealthChecks(true, conventionBuilder => conventionBuilder.WithMetadata(new AllowAnonymousAttribute()));
+        });
     }
 }

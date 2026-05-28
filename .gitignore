@@ -264,3 +264,4 @@ __pycache__/
 **/coveragereport/
 **/coverage.opencover.xml
 .DS_Store
+coverage-report

@@ -16,14 +16,11 @@ namespace Pantry.Features.WebFeature.V1.Controllers;
 [ApiController]
 public class ArticleController : ControllerBase
 {
-    private readonly ICommandPublisher _commandPublisher;
+    private readonly IPublisher _publisher;
 
-    private readonly IQueryPublisher _queryPublisher;
-
-    public ArticleController(IQueryPublisher queryPublisher, ICommandPublisher commandPublisher)
+    public ArticleController(IPublisher publisher)
     {
-        _queryPublisher = queryPublisher;
-        _commandPublisher = commandPublisher;
+        _publisher = publisher;
     }
 
     /// <summary>
@@ -33,7 +30,7 @@ public class ArticleController : ControllerBase
     [HttpGet("{articleId:long}")]
     public async Task<Results<Ok<ArticleResponse>, BadRequest>> GetArticleByIdAsync(long articleId)
     {
-        ArticleResponse article = (await _queryPublisher.ExecuteAsync(new ArticleByIdQuery(articleId))).ToDtoNotNull();
+        ArticleResponse article = (await _publisher.ExecuteQueryAsync(new ArticleByIdQuery(articleId))).ToDtoNotNull();
         return TypedResults.Ok(article);
     }
 
@@ -44,7 +41,7 @@ public class ArticleController : ControllerBase
     [HttpGet]
     public async Task<Results<Ok<ArticleListResponse>, BadRequest>> GetAllArticlesAsync()
     {
-        IEnumerable<ArticleResponse> articles = (await _queryPublisher.ExecuteAsync(new ArticleListQuery())).ToDtos();
+        IEnumerable<ArticleResponse> articles = (await _publisher.ExecuteQueryAsync(new ArticleListQuery())).ToDtos();
         return TypedResults.Ok(new ArticleListResponse { Articles = articles });
     }
 
@@ -55,7 +52,7 @@ public class ArticleController : ControllerBase
     [HttpPost]
     public async Task<Results<Ok<ArticleResponse>, BadRequest>> CreateArticleAsync([FromBody] ArticleRequest articleRequest)
     {
-        ArticleResponse article = (await _commandPublisher.ExecuteAsync(
+        ArticleResponse article = (await _publisher.ExecuteCommandAsync(
             new CreateArticleCommand(
                 articleRequest.StorageLocationId,
                 articleRequest.GlobalTradeItemNumber,
@@ -74,7 +71,7 @@ public class ArticleController : ControllerBase
     [HttpPut("{articleId:long}")]
     public async Task<Results<Ok<ArticleResponse>, BadRequest>> UpdateArticleAsync([FromBody] ArticleRequest articleRequest, long articleId)
     {
-        ArticleResponse article = (await _commandPublisher.ExecuteAsync(
+        ArticleResponse article = (await _publisher.ExecuteCommandAsync(
             new UpdateArticleCommand(
                 articleId,
                 articleRequest.StorageLocationId,
@@ -94,7 +91,7 @@ public class ArticleController : ControllerBase
     [HttpDelete("{articleId:long}")]
     public async Task<Results<NoContent, BadRequest>> DeleteArticleAsync(long articleId)
     {
-        await _commandPublisher.ExecuteAsync(new DeleteArticleCommand(articleId));
+        await _publisher.ExecuteCommandAsync(new DeleteArticleCommand(articleId));
         return TypedResults.NoContent();
     }
 }
