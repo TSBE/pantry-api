@@ -8,6 +8,7 @@
     <RepositoryUrl />
   </PropertyGroup>
   <PropertyGroup>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateDocumentationFile Condition="$(MSBuildProjectName.Contains('.Tests.'))">false</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
