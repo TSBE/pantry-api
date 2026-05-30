@@ -44,7 +44,7 @@
     <PackageVersion Include="Silverback.Core.Model" Version="5.3.1" />
     <PackageVersion Include="Silverback.Integration" Version="5.3.1" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.2.0" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.8" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
