@@ -37,8 +37,8 @@
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="Opw.HttpExceptions" Version="4.0.3" />
     <PackageVersion Include="Opw.HttpExceptions.AspNetCore" Version="4.0.3" />
-    <PackageVersion Include="Refit" Version="10.1.6" />
-    <PackageVersion Include="Refit.HttpClientFactory" Version="10.1.6" />
+    <PackageVersion Include="Refit" Version="11.0.1" />
+    <PackageVersion Include="Refit.HttpClientFactory" Version="11.0.1" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Silverback.Core" Version="5.3.3" />
     <PackageVersion Include="Silverback.Core.Model" Version="5.3.3" />
