@@ -28,6 +28,11 @@
       "matchPackageNames": [
         "Microsoft.CodeAnalysis.{/,}**"
       ]
+    },
+    {
+      "description": "Re-apply bump for bare NuGet versions (overrides :preserveSemverRanges)",
+      "matchManagers": ["nuget"],
+      "rangeStrategy": "bump"
     }
   ],
   "ignorePaths": []

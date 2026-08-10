@@ -1,23 +1,34 @@
+---
 name: deploy
 on:
   # the 1st condition
   workflow_run:
-    workflows: ["continuous"]
+    workflows: [ "continuous" ]
     types:
-      - completed
+    - completed
 jobs:
   deploy:
     name: deploy to Jelastic
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # the 2nd condition
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' && (vars.DEPLOY_ENABLED || 'true') != 'false' }}
+    if: |
+      ${{ 
+        github.event.workflow_run.conclusion == 'success' && 
+        github.ref == 'refs/heads/main' && 
+        (vars.DEPLOY_ENABLED || 'true') != 'false' 
+      }}
     steps:
-      - name: Jelastic CLI
-        # uses: abhisek91/github-actions-jelastic@v2
-        uses: DovnarAlexander/github-actions-jelastic@master
-        with:
-          jelastic_url: ${{ secrets.JELASTIC_URL }}
-          jelastic_username: ${{ secrets.JELASTIC_USERNAME }}
-          jelastic_password: ${{ secrets.JELASTIC_TOKEN }}
-          task: environment/deployment/deployarchive --envName ${{ secrets.JELASTIC_ENV_NAME }} --nodeGroup cp --fileUrl https://nightly.link/TSBE/pantry-api/workflows/continuous/main/published-app.zip --fileName published-app.zip
+    - name: Jelastic CLI
+      # uses: abhisek91/github-actions-jelastic@v2
+      uses: DovnarAlexander/github-actions-jelastic@master
+      with:
+        jelastic_url: ${{ secrets.JELASTIC_URL }}
+        jelastic_username: ${{ secrets.JELASTIC_USERNAME }}
+        jelastic_password: ${{ secrets.JELASTIC_TOKEN }}
+        task: |
+          environment/deployment/deployarchive \
+            --envName ${{ secrets.JELASTIC_ENV_NAME }} \
+            --nodeGroup cp \
+            --fileUrl https://nightly.link/TSBE/pantry-api/workflows/continuous/main/published-app.zip \
+            --fileName published-app.zip
