@@ -25,7 +25,7 @@ public static class Registrar
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        services.AddRefitClient<IEanSearchOrgApiService>(
+        services.AddRefitGeneratedClient<IEanSearchOrgApiService>(
              service => new RefitSettings()
              {
                  ContentSerializer = new SystemTextJsonContentSerializer(jsonOptions)

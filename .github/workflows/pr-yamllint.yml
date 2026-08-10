@@ -4,16 +4,15 @@ on:
   pull_request:
   merge_group:
 
-
 jobs:
   yamllint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: Yamllint
-      uses: reviewdog/action-yamllint@f01d8a48fd8d89f89895499fca2cff09f9e9e8c0 # v1.21.0
-      with:
-        level: "error"
-        filter_mode: "nofilter"
+      - name: Yamllint
+        uses: reviewdog/action-yamllint@f01d8a48fd8d89f89895499fca2cff09f9e9e8c0 # v1.21.0
+        with:
+          level: "error"
+          filter_mode: "nofilter"

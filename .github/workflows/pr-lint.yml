@@ -3,7 +3,7 @@ name: "Lint PR"
 
 on:
   pull_request:
-    types: [ opened, edited, synchronize, reopened ]
+    types: [opened, edited, synchronize, reopened]
 
 permissions:
   pull-requests: read
@@ -13,6 +13,6 @@ jobs:
     name: Validate commits
     runs-on: ubuntu-latest
     steps:
-    - uses: webiny/action-conventional-commits@v1.4.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: webiny/action-conventional-commits@7f91b1595ca1951cdb671ddc9f07a49081ec5b69
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
