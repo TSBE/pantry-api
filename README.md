@@ -42,18 +42,26 @@ _Further information which is necessary for a developer perform certain tasks. E
 
 To add a new EF Core Migration, execute the following command from Solution-Folder:
 
-```powershell
-dotnet ef migrations add <MigrationName> --project .\src\Pantry.Core\Pantry.Core.csproj -o .\Persistence\Migrations --startup-project .\src\Pantry.Service\Pantry.Service.csproj
+```shell
+dotnet ef migrations add <MigrationName> \
+  --project ./src/Pantry.Core/Pantry.Core.csproj \
+  -o ./Persistence/Migrations \
+  --startup-project ./src/Pantry.Service/Pantry.Service.csproj
 ```
 
 To remove the last migration, execute the following command from Solution-Folder:
 
-```powershell
-dotnet ef migrations remove --force --project .\src\Pantry.Core\Pantry.Core.csproj --startup-project .\src\Pantry.Service\Pantry.Service.csproj
+```shell
+dotnet ef migrations remove --force \
+  --project ./src/Pantry.Core/Pantry.Core.csproj \
+  --startup-project ./src/Pantry.Service/Pantry.Service.csproj
 ```
 
 To generate the database update scripts for all migrations, execute the following command from Solution-Folder:
 
-```powershell
-dotnet ef migrations script --project .\src\Pantry.Core\Pantry.Core.csproj --startup-project .\src\Pantry.Service\Pantry.Service.csproj -i
+```shell
+dotnet ef migrations script \
+  --project ./src/Pantry.Core/Pantry.Core.csproj \
+  --startup-project ./src/Pantry.Service/Pantry.Service.csproj \
+  -i
 ```

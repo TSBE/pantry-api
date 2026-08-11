@@ -26,7 +26,7 @@ public static class Registrar
         jsonOptions.Converters.Add(new JsonStringEnumConverter());
         jsonOptions.Converters.Add(new UnixEpochDateTimeConverter());
 
-        services.AddRefitClient<IOpenFoodFactsApiService>(
+        services.AddRefitGeneratedClient<IOpenFoodFactsApiService>(
              service => new RefitSettings()
              {
                  ContentSerializer = new SystemTextJsonContentSerializer(jsonOptions)

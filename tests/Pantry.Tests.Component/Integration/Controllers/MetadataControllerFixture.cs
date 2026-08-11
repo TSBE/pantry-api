@@ -18,13 +18,12 @@ public class MetadataControllerFixture : BaseControllerFixture
         // Arrange
         var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", FoodFacts = new Core.Models.OpenFoodFacts.Product { ProductName = "Unittest" } };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        await testApplication.SetupDatabaseAsync<AppDbContext>(
-            dbContext =>
-            {
-                dbContext.Accounts.Add(AccountJohnDoe);
-                dbContext.Households.Add(HouseholdOfJohnDoe);
-                dbContext.Metadatas.Add(metadata);
-            });
+        await testApplication.SetupDatabaseAsync<AppDbContext>(dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Households.Add(HouseholdOfJohnDoe);
+            dbContext.Metadatas.Add(metadata);
+        });
 
         using HttpClient httpClient = testApplication.CreateClient();
 
@@ -42,13 +41,12 @@ public class MetadataControllerFixture : BaseControllerFixture
         // Arrange
         var metadata = new Metadata { GlobalTradeItemNumber = "GTIN", ProductFacts = new Core.Models.EanSearchOrg.NonFoodProduct { Name = "Unittest" } };
         await using IntegrationTestWebApplicationFactory testApplication = await IntegrationTestWebApplicationFactory.CreateAsync(TestOutputHelper);
-        await testApplication.SetupDatabaseAsync<AppDbContext>(
-            dbContext =>
-            {
-                dbContext.Accounts.Add(AccountJohnDoe);
-                dbContext.Households.Add(HouseholdOfJohnDoe);
-                dbContext.Metadatas.Add(metadata);
-            });
+        await testApplication.SetupDatabaseAsync<AppDbContext>(dbContext =>
+        {
+            dbContext.Accounts.Add(AccountJohnDoe);
+            dbContext.Households.Add(HouseholdOfJohnDoe);
+            dbContext.Metadatas.Add(metadata);
+        });
 
         using HttpClient httpClient = testApplication.CreateClient();
 

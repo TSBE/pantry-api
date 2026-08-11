@@ -1,3 +1,4 @@
+---
 name: continuous
 
 on:
@@ -30,7 +31,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           global-json-file: global.json
 
@@ -45,13 +46,13 @@ jobs:
 
       - name: Test (xUnit v3 + MTP coverage)
         run: |
-            dotnet test \
-            --project ./tests/Pantry.Tests.Component/Pantry.Tests.Component.csproj \
-            --no-build \
-            -c Release \
-            --coverage \
-            --coverage-output-format cobertura \
-            --coverage-output coverage.cobertura.xml
+          dotnet test \
+          --project ./tests/Pantry.Tests.Component/Pantry.Tests.Component.csproj \
+          --no-build \
+          -c Release \
+          --coverage \
+          --coverage-output-format cobertura \
+          --coverage-output coverage.cobertura.xml
 
       - name: Generate coverage report
         run: |
@@ -74,13 +75,13 @@ jobs:
             -Dsonar.pullrequest.base=${{ github.base_ref }}
 
       - name: Upload test results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: test-results
           path: artifacts/test-results
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: coverage-report
           path: coverage-report
@@ -102,7 +103,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           global-json-file: global.json
 
@@ -120,7 +121,7 @@ jobs:
             -o app/publish
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: published-app
           path: app/publish/
