@@ -34,6 +34,24 @@
       "description": "Re-apply bump for bare NuGet versions (overrides :preserveSemverRanges)",
       "matchManagers": ["nuget"],
       "rangeStrategy": "bump"
+    },
+    {
+      "description": "Bundle all GitHub workflow (Actions) updates into one PR",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    },
+    {
+      "description": "Limit reviewdog action updates to one PR per week (Mondays)",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": [
+        "reviewdog/**"
+      ],
+      "groupName": "reviewdog",
+      "groupSlug": "reviewdog",
+      "schedule": ["* * * * 1"],
+      "prConcurrentLimit": 1,
+      "prHourlyLimit": 1
     }
   ],
   "ignorePaths": []
