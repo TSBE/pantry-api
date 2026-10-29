@@ -40,9 +40,9 @@
     <PackageVersion Include="Refit" Version="16.4.0" />
     <PackageVersion Include="Refit.HttpClientFactory" Version="16.4.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Silverback.Core" Version="5.5.2" />
-    <PackageVersion Include="Silverback.Core.Model" Version="5.5.2" />
-    <PackageVersion Include="Silverback.Integration" Version="5.5.2" />
+    <PackageVersion Include="Silverback.Core" Version="5.6.0" />
+    <PackageVersion Include="Silverback.Core.Model" Version="5.6.0" />
+    <PackageVersion Include="Silverback.Integration" Version="5.6.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.3.1" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
